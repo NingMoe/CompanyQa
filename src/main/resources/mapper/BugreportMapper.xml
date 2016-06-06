@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!--命名空间-->
+<mapper namespace="com.koolearn.qa.dao.platform.BugReportMapper">
+
+    <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/>
+    <!--列名到对象属性的映射 -->
+    <resultMap id="BaseResultMap" type="com.koolearn.qa.model.BugReport">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="projectId" property="projectId" jdbcType="INTEGER"/>
+        <result column="environment" property="environment" jdbcType="VARCHAR"/>
+        <result column="unresolved" property="unresolved" jdbcType="VARCHAR"/>
+        <result column="feedback" property="feedback" jdbcType="VARCHAR"/>
+        <result column="testCases" property="testCases" jdbcType="INTEGER"/>
+        <result column="executedCases" property="executedCases" jdbcType="INTEGER"/>
+        <result column="testResult" property="testResult" jdbcType="VARCHAR"/>
+        <result column="seriousBugs" property="seriousBugs" jdbcType="INTEGER"/>
+        <result column="secondaryBugs" property="secondaryBugs" jdbcType="INTEGER"/>
+        <result column="generalBugs" property="generalBugs" jdbcType="INTEGER"/>
+        <result column="layoutBugs" property="layoutBugs" jdbcType="INTEGER"/>
+        <result column="textBugs" property="textBugs" jdbcType="INTEGER"/>
+        <result column="newfeatureBugs" property="newfeatureBugs" jdbcType="INTEGER"/>
+        <result column="totalBugs" property="totalBugs" jdbcType="INTEGER"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+    </resultMap>
+    <resultMap id="countMap" type="java.lang.Integer" >
+        <result property="sum" column="SUM" jdbcType="INTEGER" />
+    </resultMap>
+    <!--可被其他语句引用的可重用语句块。-->
+    <sql id="Base_Column_List">
+        id,projectId,environment,unresolved,feedback,testCases,executedCases,testResult,seriousBugs,secondaryBugs,generalBugs,layoutBugs,textBugs,newfeatureBugs,totalBugs,status
+    </sql>
+    <insert id="insertSelective" parameterType="com.koolearn.qa.model.BugReport">
+        insert into bugReport
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                id,
+            </if>
+            <if test="projectId!=null">
+                projectId,
+            </if>
+            <if test="environment!=null">
+                environment,
+            </if>
+            <if test="unresolved!=null">
+                unresolved,
+            </if>
+            <if test="feedback!=null">
+                feedback,
+            </if>
+            <if test="testCases!=null">
+                testCases,
+            </if>
+            <if test="executedCases!=null">
+                executedCases,
+            </if>
+            <if test="testResult!=null">
+                testResult,
+            </if>
+            <if test="seriousBugs!=null">
+                seriousBugs,
+            </if>
+            <if test="secondaryBugs!=null">
+                secondaryBugs,
+            </if>
+            <if test="generalBugs!=null">
+                generalBugs,
+            </if>
+            <if test="layoutBugs!=null">
+                layoutBugs,
+            </if>
+            <if test="textBugs!=null">
+                textBugs,
+            </if>
+            <if test="newfeatureBugs!=null">
+                newfeatureBugs,
+            </if>
+            <if test="totalBugs!=null">
+                totalBugs,
+            </if>
+            <if test="true">
+                status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="projectId != null">
+                #{projectId,jdbcType=INTEGER},
+            </if>
+            <if test="environment != null">
+                #{environment,jdbcType=VARCHAR},
+            </if>
+            <if test="unresolved != null">
+                #{unresolved,jdbcType=VARCHAR},
+            </if>
+            <if test="feedback != null">
+                #{feedback,jdbcType=VARCHAR},
+            </if>
+            <if test="testCases != null">
+                #{testCases,jdbcType=INTEGER},
+            </if>
+            <if test="executedCases != null">
+                #{executedCases,jdbcType=INTEGER},
+            </if>
+            <if test="testResult != null">
+                #{testResult,jdbcType=VARCHAR},
+            </if>
+            <if test="seriousBugs != null">
+                #{seriousBugs,jdbcType=INTEGER},
+            </if>
+            <if test="secondaryBugs != null">
+                #{secondaryBugs,jdbcType=INTEGER},
+            </if>
+            <if test="generalBugs != null">
+                #{generalBugs,jdbcType=INTEGER},
+            </if>
+            <if test="layoutBugs != null">
+                #{layoutBugs,jdbcType=INTEGER},
+            </if>
+            <if test="textBugs != null">
+                #{textBugs,jdbcType=INTEGER},
+            </if>
+            <if test="newfeatureBugs != null">
+                #{newfeatureBugs,jdbcType=INTEGER},
+            </if>
+            <if test="totalBugs != null">
+                #{totalBugs,jdbcType=INTEGER},
+            </if>
+            <if test="true">
+                1,
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.koolearn.qa.model.BugReport">
+        update bugReport
+        <set>
+            <if test="projectId != null">
+                projectId = #{projectId,jdbcType=INTEGER},
+            </if>
+            <if test="environment != null">
+                environment = #{environment,jdbcType=VARCHAR},
+            </if>
+            <if test="unresolved != null">
+                unresolved = #{unresolved,jdbcType=VARCHAR},
+            </if>
+            <if test="feedback != null">
+                feedback = #{feedback,jdbcType=VARCHAR},
+            </if>
+            <if test="testCases != null">
+                testCases = #{testCases,jdbcType=INTEGER},
+            </if>
+            <if test="executedCases != null">
+                executedCases = #{executedCases,jdbcType=INTEGER},
+            </if>
+            <if test="testResult != null">
+                testResult = #{testResult,jdbcType=VARCHAR},
+            </if>
+            <if test="seriousBugs != null">
+                seriousBugs = #{seriousBugs,jdbcType=INTEGER},
+            </if>
+            <if test="secondaryBugs != null">
+                secondaryBugs = #{secondaryBugs,jdbcType=INTEGER},
+            </if>
+            <if test="generalBugs != null">
+                generalBugs = #{generalBugs,jdbcType=INTEGER},
+            </if>
+            <if test="layoutBugs != null">
+                layoutBugs = #{layoutBugs,jdbcType=INTEGER},
+            </if>
+            <if test="textBugs != null">
+                textBugs = #{textBugs,jdbcType=INTEGER},
+            </if>
+            <if test="newfeatureBugs != null">
+                newfeatureBugs = #{newfeatureBugs,jdbcType=INTEGER},
+            </if>
+            <if test="totalBugs != null">
+                totalBugs = #{totalBugs,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="deleteByPrimaryKey" parameterType="Integer">
+        update bugReport
+        set status=0
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from bugReport
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectByProjectId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from bugReport
+        where projectId = #{projectId,jdbcType=INTEGER} and status = 1
+    </select>
+    <select id="selectCountByDate" resultMap="countMap" >
+        select count(*) as sum
+        from bugReport
+        where  projectId = #{projectId,jdbcType=INTEGER} and status =1
+    </select>
+    <select id="selectCountByProjectId" resultMap="countMap"  parameterType="java.lang.Integer">
+        select count(*) as sum
+        from bugReport
+        where  projectId = #{projectId,jdbcType=INTEGER} and status =1
+    </select>
+</mapper>

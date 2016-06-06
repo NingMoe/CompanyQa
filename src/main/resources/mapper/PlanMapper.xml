@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!--命名空间-->
+<mapper namespace="com.koolearn.qa.dao.platform.PlanMapper">
+
+    <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/>
+    <!--列名到对象属性的映射 -->
+    <resultMap id="BaseResultMap" type="com.koolearn.qa.model.Plan">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="projectId" property="projectId" jdbcType="INTEGER"/>
+        <result column="filePath" property="filePath" jdbcType="VARCHAR"/>
+        <result column="fileName" property="fileName" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="createTime" property="createTime" jdbcType="DATE"/>
+    </resultMap>
+    <!--可被其他语句引用的可重用语句块。-->
+    <sql id="Base_Column_List">
+        id,projectId,filePath,fileName,status,createTime
+    </sql>
+    <insert id="insertSelective" parameterType="com.koolearn.qa.model.Plan">
+        insert into plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                id,
+            </if>
+            <if test="projectId!=null">
+                projectId,
+            </if>
+            <if test="filePath!=null">
+                filePath,
+            </if>
+            <if test="fileName!=null">
+                fileName,
+            </if>
+            <if test="createTime!=null">
+                createTime,
+            </if>
+            <if test="true">
+                status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="projectId != null">
+                #{projectId,jdbcType=INTEGER},
+            </if>
+            <if test="filePath != null">
+                #{filePath,jdbcType=VARCHAR},
+            </if>
+            <if test="fileName != null">
+                #{fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=DATE},
+            </if>
+            <if test="true">
+                1,
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.koolearn.qa.model.Plan">
+        update plan
+        <set>
+            <if test="projectId != null">
+                projectId = #{projectId,jdbcType=INTEGER},
+            </if>
+            <if test="filePath != null">
+                filePath = #{filePath,jdbcType=VARCHAR},
+            </if>
+            <if test="fileName != null">
+                fileName = #{fileName,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                createTime = #{createTime,jdbcType=DATE},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="deleteByPrimaryKey" parameterType="Integer">
+        update plan
+        set status=0
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from plan
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectByProjectId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from plan
+        where projectId = #{projectId,jdbcType=INTEGER} and status = 1
+    </select>
+</mapper>

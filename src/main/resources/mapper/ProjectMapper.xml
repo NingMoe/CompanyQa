@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!--命名空间-->
+<mapper namespace="com.koolearn.qa.dao.platform.ProjectMapper">
+
+    <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/>
+    <!--列名到对象属性的映射 -->
+    <resultMap id="BaseResultMap" type="com.koolearn.qa.model.Project">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="projectMantis" property="projectMantis" jdbcType="INTEGER"/>
+        <result column="categoryMantis" property="categoryMantis" jdbcType="VARCHAR"/>
+        <result column="versionMantis" property="versionMantis" jdbcType="VARCHAR"/>
+        <result column="productId" property="productId" jdbcType="INTEGER"/>
+        <result column="producter" property="producter" jdbcType="VARCHAR"/>
+        <result column="developer" property="developer" jdbcType="VARCHAR"/>
+        <result column="tester" property="tester" jdbcType="VARCHAR"/>
+        <result column="startTime2plan" property="startTime2plan" jdbcType="TIMESTAMP"/>
+        <result column="endTime2plan" property="endTime2plan" jdbcType="TIMESTAMP"/>
+        <result column="startTime2actual" property="startTime2actual" jdbcType="TIMESTAMP"/>
+        <result column="endTime2actual" property="endTime2actual" jdbcType="TIMESTAMP"/>
+        <result column="projectStatus" property="projectStatus" jdbcType="INTEGER"/>
+        <result column="days" property="days" jdbcType="DOUBLE"/>
+        <result column="requirementDays" property="requirementDays" jdbcType="DOUBLE"/>
+        <result column="developDays" property="developDays" jdbcType="DOUBLE"/>
+        <result column="testDays" property="testDays" jdbcType="DOUBLE"/>
+        <result column="acceptanceDays" property="acceptanceDays" jdbcType="DOUBLE"/>
+        <result column="onlineDays" property="onlineDays" jdbcType="DOUBLE"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+    </resultMap>
+    <!--可被其他语句引用的可重用语句块。-->
+    <sql id="Base_Column_List">
+        id,name,projectMantis,categoryMantis,versionMantis,productId,producter,developer,tester,startTime2plan,endTime2plan,startTime2actual,endTime2actual,projectStatus,days,requirementDays,developDays,testDays,acceptanceDays,onlineDays,description,status
+    </sql>
+    <update id="updateByPrimaryKey" parameterType="com.koolearn.qa.model.Project">
+        UPDATE  project SET
+            name = #{name,jdbcType=VARCHAR},
+            projectMantis = #{projectMantis,jdbcType=INTEGER},
+            categoryMantis=#{categoryMantis,jdbcType=VARCHAR},
+            versionMantis = #{versionMantis,jdbcType=VARCHAR},
+            productId = #{productId,jdbcType=INTEGER},
+            producter = #{producter,jdbcType=VARCHAR},
+            developer = #{developer,jdbcType=VARCHAR},
+            tester = #{tester,jdbcType=VARCHAR},
+            startTime2plan = #{startTime2plan,jdbcType=TIMESTAMP},
+            endTime2plan = #{endTime2plan,jdbcType=TIMESTAMP},
+            startTime2actual = #{startTime2actual,jdbcType=TIMESTAMP},
+            endTime2actual = #{endTime2actual,jdbcType=TIMESTAMP},
+            projectStatus = #{projectStatus,jdbcType=INTEGER},
+            days = #{days,jdbcType=DOUBLE},
+            requirementDays = #{requirementDays,jdbcType=DOUBLE},
+            developDays = #{developDays,jdbcType=DOUBLE},
+            testDays = #{testDays,jdbcType=DOUBLE},
+            acceptanceDays = #{acceptanceDays,jdbcType=DOUBLE},
+            onlineDays = #{onlineDays,jdbcType=DOUBLE},
+            description = #{description,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+     </update>
+    <insert id="insertSelective" parameterType="com.koolearn.qa.model.Project">
+        insert into project
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                id,
+            </if>
+            <if test="name!=null">
+                name,
+            </if>
+            <if test="projectMantis!=null">
+                projectMantis,
+            </if>
+            <if test="categoryMantis!=null">
+                categoryMantis,
+            </if>
+            <if test="versionMantis!=null">
+                versionMantis,
+            </if>
+            <if test="productId!=null">
+                productId,
+            </if>
+            <if test="producter!=null">
+                producter,
+            </if>
+            <if test="developer!=null">
+                developer,
+            </if>
+            <if test="tester!=null">
+                tester,
+            </if>
+            <if test="startTime2plan!=null">
+                startTime2plan,
+            </if>
+            <if test="endTime2plan!=null">
+                endTime2plan,
+            </if>
+            <if test="startTime2actual!=null">
+                startTime2actual,
+            </if>
+            <if test="endTime2actual!=null">
+                endTime2actual,
+            </if>
+            <if test="projectStatus!=null">
+                projectStatus,
+            </if>
+            <if test="days!=null">
+                days,
+            </if>
+            <if test="requirementDays!=null">
+                requirementDays,
+            </if>
+            <if test="developDays!=null">
+                developDays,
+            </if>
+            <if test="testDays!=null">
+                testDays,
+            </if>
+            <if test="acceptanceDays!=null">
+                acceptanceDays,
+            </if>
+            <if test="onlineDays!=null">
+                onlineDays,
+            </if>
+            <if test="description!=null">
+                description,
+            </if>
+            <if test="true">
+                status
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="projectMantis != null">
+                #{projectMantis,jdbcType=INTEGER},
+            </if>
+            <if test="categoryMantis!=null">
+                #{categoryMantis,jdbcType=VARCHAR},
+            </if>
+            <if test="versionMantis != null">
+                #{versionMantis,jdbcType=VARCHAR},
+            </if>
+            <if test="productId != null">
+                #{productId,jdbcType=INTEGER},
+            </if>
+            <if test="producter != null">
+                #{producter,jdbcType=VARCHAR},
+            </if>
+            <if test="developer != null">
+                #{developer,jdbcType=VARCHAR},
+            </if>
+            <if test="tester != null">
+                #{tester,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime2plan != null">
+                #{startTime2plan,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime2plan != null">
+                #{endTime2plan,jdbcType=TIMESTAMP},
+            </if>
+            <if test="startTime2actual != null">
+                #{startTime2actual,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime2actual != null">
+                #{endTime2actual,jdbcType=TIMESTAMP},
+            </if>
+            <if test="projectStatus != null">
+                #{projectStatus,jdbcType=INTEGER},
+            </if>
+            <if test="days != null">
+                #{days,jdbcType=DOUBLE},
+            </if>
+            <if test="requirementDays != null">
+                #{requirementDays,jdbcType=DOUBLE},
+            </if>
+            <if test="developDays != null">
+                #{developDays,jdbcType=DOUBLE},
+            </if>
+            <if test="testDays != null">
+                #{testDays,jdbcType=DOUBLE},
+            </if>
+            <if test="acceptanceDays != null">
+                #{acceptanceDays,jdbcType=DOUBLE},
+            </if>
+            <if test="onlineDays != null">
+                #{onlineDays,jdbcType=DOUBLE},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="true">
+                1,
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.koolearn.qa.model.Project">
+        update project
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="projectMantis != null">
+                projectMantis = #{projectMantis,jdbcType=INTEGER},
+            </if>
+            <if test="categoryMantis!=null">
+                categoryMantis=#{categoryMantis,jdbcType=VARCHAR},
+            </if>
+            <if test="versionMantis != null">
+                versionMantis = #{versionMantis,jdbcType=VARCHAR},
+            </if>
+            <if test="productId != null">
+                productId = #{productId,jdbcType=INTEGER},
+            </if>
+            <if test="producter != null">
+                producter = #{producter,jdbcType=VARCHAR},
+            </if>
+            <if test="developer != null">
+                developer = #{developer,jdbcType=VARCHAR},
+            </if>
+            <if test="tester != null">
+                tester = #{tester,jdbcType=VARCHAR},
+            </if>
+            <if test="startTime2plan != null">
+                startTime2plan = #{startTime2plan,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime2plan != null">
+                endTime2plan = #{endTime2plan,jdbcType=TIMESTAMP},
+            </if>
+            <if test="startTime2actual != null">
+                startTime2actual = #{startTime2actual,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endTime2actual != null">
+                endTime2actual = #{endTime2actual,jdbcType=TIMESTAMP},
+            </if>
+            <if test="projectStatus != null">
+                projectStatus = #{projectStatus,jdbcType=INTEGER},
+            </if>
+            <if test="days != null">
+                days = #{days,jdbcType=DOUBLE},
+            </if>
+            <if test="requirementDays != null">
+                requirementDays = #{requirementDays,jdbcType=DOUBLE},
+            </if>
+            <if test="developDays != null">
+                developDays = #{developDays,jdbcType=DOUBLE},
+            </if>
+            <if test="testDays != null">
+                testDays = #{testDays,jdbcType=DOUBLE},
+            </if>
+            <if test="acceptanceDays != null">
+                acceptanceDays = #{acceptanceDays,jdbcType=DOUBLE},
+            </if>
+            <if test="onlineDays != null">
+                onlineDays = #{onlineDays,jdbcType=DOUBLE},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER}
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="deleteByPrimaryKey" parameterType="Integer">
+        update project
+        set status=0
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from project
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from project
+    </select>
+    <select id="selectAllValid" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from project
+        where status = 1
+    </select>
+    <select id="selectByProductId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from project
+        where productId = #{productId,jdbcType=INTEGER}
+    </select>
+    <select id="selectByConditions" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List"/>
+        from project
+        <where>
+            <if test="productId != null">
+                productId =#{productId,jdbcType=INTEGER}
+            </if>
+            <if test="name != null">
+                AND name=#{name,jdbcType=VARCHAR}
+            </if>
+            <if test="startTimePlan != null">
+                AND startTime2plan &gt;=#{startTimePlan,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endTimePlan != null">
+                AND startTime2plan &lt;= #{endTimePlan,jdbcType=TIMESTAMP}
+            </if>
+            <if test="startTimeActual != null">
+                AND startTime2actual &gt;=#{startTimeActual,jdbcType=TIMESTAMP}
+            </if>
+            <if test="endTimeActual != null">
+                AND startTime2actual &lt;= #{endTimeActual,jdbcType=TIMESTAMP}
+            </if>
+            <if test="projectStatus != null">
+                AND projectStatus = #{projectStatus,jdbcType=INTEGER}
+            </if>
+            <if test="tester != null">
+                AND find_in_set(#{tester},tester)
+            </if>
+            AND status = 1;
+        </where>
+    </select>
+</mapper>

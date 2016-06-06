@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.koolearn.qa.dao.mantis.MantisMapper">
+
+    <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/>
+    <resultMap id="BaseResultMap" type="com.koolearn.qa.model.Mantis">
+        <result column="project_id" property="project_id" jdbcType="INTEGER"/>
+        <result column="category" property="category" jdbcType="VARCHAR"/>
+        <result column="version" property="version" jdbcType="VARCHAR"/>
+        <result column="date" property="date" jdbcType="DATE"/>
+        <result column="newBugs" property="newBugs" jdbcType="INTEGER"/>
+        <result column="assignedBugs" property="assignedBugs" jdbcType="INTEGER"/>
+        <result column="confirmedBugs" property="confirmedBugs" jdbcType="INTEGER"/>
+        <result column="resolvedBugs" property="resolvedBugs" jdbcType="INTEGER"/>
+        <result column="feedbackBugs" property="feedbackBugs" jdbcType="INTEGER"/>
+        <result column="closedBugs" property="closedBugs" jdbcType="INTEGER"/>
+        <result column="seriousBugs" property="seriousBugs" jdbcType="INTEGER"/>
+        <result column="secondaryBugs" property="secondaryBugs" jdbcType="INTEGER"/>
+        <result column="generalBugs" property="generalBugs" jdbcType="INTEGER"/>
+        <result column="layoutBugs" property="layoutBugs" jdbcType="INTEGER"/>
+        <result column="textBugs" property="textBugs" jdbcType="INTEGER"/>
+        <result column="newfeatureBugs" property="newfeatureBugs" jdbcType="INTEGER"/>
+        <result column="totalBugs" property="totalBugs" jdbcType="INTEGER"/>
+    </resultMap>
+    <select id="statisticsEveryday" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        SELECT
+        project_id,category,version,#{date} AS date,
+        sum(
+        CASE
+        WHEN status = 50 THEN
+        1
+        ELSE
+        0
+        END
+        ) AS assignedBugs,
+        sum(
+        CASE
+        WHEN date_submitted &gt;= #{date}
+        AND date_submitted &lt; date_add(#{date},interval 1 day) THEN
+        1
+        ELSE
+        0
+        END
+        ) AS newBugs,
+        sum(
+        CASE
+        WHEN status = 40 THEN
+        1
+        ELSE
+        0
+        END
+        ) AS confirmedBugs,
+        sum(
+        CASE
+        WHEN status = 80 THEN
+        1
+        ELSE
+        0
+        END
+        ) AS resolvedBugs,
+        sum(
+        CASE
+        WHEN status = 20 THEN
+        1
+        ELSE
+        0
+        END
+        ) AS feedbackBugs,
+        sum(
+        CASE
+        WHEN status = 90 THEN
+        1
+        ELSE
+        0
+        END
+        ) AS closedBugs
+        FROM
+        mantis_bug_table
+        WHERE
+        project_id = #{project_id,jdbcType=INTEGER}
+        <if test="category != null">
+            AND category=#{category,jdbcType=VARCHAR}
+        </if>
+        <if test="version != null">
+           AND version=#{version}
+        </if>
+        GROUP BY project_id
+    </select>
+   <!--
+    严重错误：70
+    次要错误:60
+    一般错误:50
+    布局不合理:40
+    文字错误:30
+    微不足道:20
+    新特性:10
+    -->
+    <select id="statisticsBySeriousness" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        SELECT project_id,category,version,
+        sum( CASE WHEN severity=70 THEN 1 ELSE 0 END) AS seriousBugs,
+        sum( CASE WHEN severity=60 THEN 1 ELSE 0 END) AS secondaryBugs,
+        sum( CASE WHEN severity=50 THEN 1 ELSE 0 END) AS generalBugs,
+        sum( CASE WHEN severity=40 THEN 1 ELSE 0 END) AS layoutBugs,
+        sum( CASE WHEN severity=30 THEN 1 ELSE 0 END) AS textBugs,
+        sum( CASE WHEN severity=10 THEN 1 ELSE 0 END) AS newfeatureBugs,
+        sum(CASE WHEN status=90 THEN 0 ELSE 1 END) AS totalBugs
+        FROM mantis_bug_table
+        WHERE project_id = #{project_id,jdbcType=INTEGER}
+        <if test="category != null">
+            AND category=#{category,jdbcType=VARCHAR}
+        </if>
+        <if test="version != null">
+            AND version=#{version,jdbcType=VARCHAR}
+        </if>
+        GROUP BY project_id
+    </select>
+</mapper>

@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!--命名空间-->
+<mapper namespace="com.koolearn.qa.dao.platform.ProductMapper">
+
+    <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/>
+    <!--列名到对象属性的映射 -->
+    <resultMap id="BaseResultMap" type="com.koolearn.qa.model.Product">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="name" property="name" jdbcType="VARCHAR"/>
+        <result column="groups" property="group" jdbcType="INTEGER"/>
+        <result column="leader" property="leader" jdbcType="VARCHAR"/>
+        <result column="status" property="status" jdbcType="INTEGER"/>
+        <result column="creatime" property="creatime" jdbcType="DATE"/>
+        <result column="description" property="description" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!--可被其他语句引用的可重用语句块。-->
+    <sql id="Base_Column_List">
+        id,name,groups,leader,status,creatime,description
+    </sql>
+    <insert id="insertProduct" parameterType="com.koolearn.qa.model.Product" useGeneratedKeys="true" keyProperty="id">
+    insert into product (name, groups,leader, status, creatime, description)
+        values (#{name,jdbcType=VARCHAR},#{group,jdbcType=INTEGER}, #{leader,jdbcType=VARCHAR},1,
+        #{creatime,jdbcType=DATE},
+        #{description,jdbcType=VARCHAR})
+    </insert>
+    <insert id="insertSelective" parameterType="com.koolearn.qa.model.Product">
+        insert into product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                id,
+            </if>
+            <if test="name!=null">
+                name,
+            </if>
+            <if test="groups!=null">
+                groups,
+            </if>
+            <if test="leader!=null">
+                leader,
+            </if>
+            <if test="true">
+                status,
+            </if>
+            <if test="creatime!=null">
+                creatime,
+            </if>
+            <if test="description!=null">
+                description,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="group != null">
+                #{group,jdbcType=INTEGER},
+            </if>
+            <if test="leader != null">
+                #{leader,jdbcType=VARCHAR},
+            </if>
+            <if test="true">
+                1,
+            </if>
+            <if test="creatime != null">
+                #{creatime,jdbcType=DATE},
+            </if>
+            <if test="description != null">
+                #{description,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.koolearn.qa.model.Product">
+        update product
+        <set>
+            <if test="name != null">
+                name = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="group != null">
+                groups = #{group,jdbcType=INTEGER},
+            </if>
+            <if test="leader != null">
+                leader = #{leader,jdbcType=VARCHAR},
+            </if>
+            <if test="creatime != null">
+                creatime = #{creatime,jdbcType=INTEGER},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.koolearn.qa.model.Product">
+        update product
+        set name = #{name,jdbcType=VARCHAR},
+        groups =#{group,jdbcType=INTEGER},
+        leader = #{leader,jdbcType=VARCHAR},
+        creatime = #{creatime,jdbcType=INTEGER},
+        description = #{description,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="deleteByPrimaryKey" parameterType="Integer">
+    update product
+    set status=2
+    where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from product
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectBySelective" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select
+        <include refid="Base_Column_List"/>
+        from product
+        <where>
+            <if test="name != null">
+                name =#{name}
+            </if>
+            <if test="group != null">
+             AND   groups=#{group}
+            </if>
+            <if test="leader != null">
+             AND   leader=#{leader}
+            </if>
+            <if test="status != null">
+             AND   status=#{status}
+            </if>
+        </where>
+    </select>
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from product
+    </select>
+    <select id="selectAllEnabled" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from product where status = 1
+    </select>
+</mapper>

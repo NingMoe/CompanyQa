@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!--命名空间-->
+<mapper namespace="com.koolearn.qa.dao.platform.ProgressMapper">
+
+    <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/>
+    <!--列名到对象属性的映射 -->
+    <resultMap id="BaseResultMap" type="com.koolearn.qa.model.Progress">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="projectId" property="projectId" jdbcType="INTEGER"/>
+        <result column="date" property="date" jdbcType="DATE"/>
+        <result column="progress" property="progress" jdbcType="VARCHAR"/>
+        <result column="problem" property="problem" jdbcType="VARCHAR"/>
+        <result column="testCases" property="testCases" jdbcType="INTEGER"/>
+        <result column="newBugs" property="newBugs" jdbcType="INTEGER"/>
+        <result column="assignedBugs" property="assignedBugs" jdbcType="INTEGER"/>
+        <result column="confirmedBugs" property="confirmedBugs" jdbcType="INTEGER"/>
+        <result column="resolvedBugs" property="resolvedBugs" jdbcType="INTEGER"/>
+        <result column="feedbackBugs" property="feedbackBugs" jdbcType="INTEGER"/>
+        <result column="closedBugs" property="closedBugs" jdbcType="INTEGER"/>
+        <result column="status" property="status" javaType="INTEGER"/>
+    </resultMap>
+    <resultMap id="countMap" type="java.lang.Integer" >
+        <result property="sum" column="SUM" jdbcType="INTEGER" />
+    </resultMap>
+    <!--可被其他语句引用的可重用语句块。-->
+    <sql id="Base_Column_List">
+        id,projectId,date,progress,problem,testCases,newBugs,assignedBugs,confirmedBugs,resolvedBugs,feedbackBugs,closedBugs,status
+    </sql>
+    <insert id="insertSelective" parameterType="com.koolearn.qa.model.Progress">
+        insert into progress
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                id,
+            </if>
+            <if test="projectId!=null">
+                projectId,
+            </if>
+            <if test="date!=null">
+                date,
+            </if>
+            <if test="progress!=null">
+                progress,
+            </if>
+            <if test="problem!=null">
+                problem,
+            </if>
+            <if test="testCases!=null">
+                testCases,
+            </if>
+            <if test="newBugs!=null">
+                newBugs,
+            </if>
+            <if test="assignedBugs!=null">
+                assignedBugs,
+            </if>
+            <if test="confirmedBugs!=null">
+                confirmedBugs,
+            </if>
+            <if test="resolvedBugs!=null">
+                resolvedBugs,
+            </if>
+            <if test="feedbackBugs!=null">
+                feedbackBugs,
+            </if>
+            <if test="closedBugs!=null">
+                closedBugs,
+            </if>
+            <if test="true">
+                status,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="projectId != null">
+                #{projectId,jdbcType=INTEGER},
+            </if>
+            <if test="date != null">
+                #{date,jdbcType=DATE},
+            </if>
+            <if test="progress != null">
+                #{progress,jdbcType=VARCHAR},
+            </if>
+            <if test="problem != null">
+                #{problem,jdbcType=VARCHAR},
+            </if>
+            <if test="testCases != null">
+                #{testCases,jdbcType=INTEGER},
+            </if>
+            <if test="newBugs != null">
+                #{newBugs,jdbcType=INTEGER},
+            </if>
+            <if test="assignedBugs != null">
+                #{assignedBugs,jdbcType=INTEGER},
+            </if>
+            <if test="confirmedBugs != null">
+                #{confirmedBugs,jdbcType=INTEGER},
+            </if>
+            <if test="resolvedBugs != null">
+                #{resolvedBugs,jdbcType=INTEGER},
+            </if>
+            <if test="feedbackBugs != null">
+                #{feedbackBugs,jdbcType=INTEGER},
+            </if>
+            <if test="closedBugs != null">
+                #{closedBugs,jdbcType=INTEGER},
+            </if>
+            <if test="true">
+                1,
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.koolearn.qa.model.Progress">
+        update progress
+        <set>
+            <if test="projectId != null">
+                projectId = #{projectId,jdbcType=INTEGER},
+            </if>
+            <if test="date != null">
+                date = #{date,jdbcType=DATE},
+            </if>
+            <if test="progress != null">
+                progress = #{progress,jdbcType=VARCHAR},
+            </if>
+            <if test="problem != null">
+                problem = #{problem,jdbcType=VARCHAR},
+            </if>
+            <if test="testCases != null">
+                testCases = #{testCases,jdbcType=INTEGER},
+            </if>
+            <if test="newBugs != null">
+                newBugs = #{newBugs,jdbcType=INTEGER},
+            </if>
+            <if test="assignedBugs != null">
+                assignedBugs = #{assignedBugs,jdbcType=INTEGER},
+            </if>
+            <if test="confirmedBugs != null">
+                confirmedBugs = #{confirmedBugs,jdbcType=INTEGER},
+            </if>
+            <if test="resolvedBugs != null">
+                resolvedBugs = #{resolvedBugs,jdbcType=INTEGER},
+            </if>
+            <if test="feedbackBugs != null">
+                feedbackBugs = #{feedbackBugs,jdbcType=INTEGER},
+            </if>
+            <if test="closedBugs != null">
+                closedBugs = #{closedBugs,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="deleteByPrimaryKey" parameterType="Integer">
+        update progress
+        set status=2
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from progress
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectByProjectId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from progress
+        where projectId = #{projectId,jdbcType=INTEGER} and status = 1 order by date ASC
+    </select>
+    <select id="selectCountByDate" resultMap="countMap"  parameterType="java.util.Map">
+        select count(*) as sum
+        from progress
+        where  projectId = #{projectId,jdbcType=INTEGER} and date = #{date,jdbcType=DATE} and status =1
+    </select>
+</mapper>
