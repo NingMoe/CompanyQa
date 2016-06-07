@@ -22,4 +22,7 @@ public interface IGroupService  extends GenericService<Group,Integer> {
      * @return
      */
     List<Group> getAllValidGroups();
+
+    int recovery(Integer id);
+
 }

@@ -57,15 +57,15 @@
     <div class="form-group">
         <div class="col-md-offset-3">
             <button type="submit" class="btn btn-default" name="submit" id="submit">查询</button>
-            <button type="reset" class="btn btn-default" name="reset" id="reset"  onclick="">重置</button>
+            <button type="reset" class="btn btn-default" name="reset" id="reset" onclick="">重置</button>
         </div>
     </div>
 </form>
-<shiro:hasRole name="tester">
+<shiro:hasAnyRoles  name="tester,admin">
     <input type="button" class="btn btn-default" name="addProduct" id="addProduct"
            onclick="window.location.href='<%=request.getContextPath() %>/product/toAddProduct'"
            value="添加系统"/>
-</shiro:hasRole>
+</shiro:hasAnyRoles >
 <table class="table table-hover">
     <thead>
     <tr>
@@ -98,10 +98,11 @@
             <td>
                 <div align="center">
                     <c:forEach items="${allGroups}" var="group">
-                    <c:choose>
-                        <c:when test="${group.id==product.group}">${group.name}</c:when>
-                    </c:choose>
+                        <c:choose>
+                            <c:when test="${group.id==product.group}">${group.name}</c:when>
+                        </c:choose>
                     </c:forEach>
+                </div>
             </td>
             <td>
                 <div align="center">${product.leader}</div>
@@ -120,13 +121,16 @@
             </td>
             <td>
                 <div align="center">
-                    <a href="<%=request.getContextPath() %>/project/getProjectsByProductId?productId=${product.id}" class="btn-link">查看</a>
-                    <shiro:hasRole name="tester">
+                    <a href="<%=request.getContextPath() %>/project/getProjectsByProductId?productId=${product.id}"
+                       class="btn-link">查看</a>
+                    <shiro:hasAnyRoles  name="tester,admin">
                         <c:if test="${product.status==1}">
-                            <a href="<%=request.getContextPath() %>/product/toEditProject?id=${product.id}" class="btn-link">编辑</a>
-                            <a href="<%=request.getContextPath() %>/product/delProduct?id=${product.id}" class="btn-link" onclick=javascrip:window.confirm("您确定要删除吗?")>删除</a>
+                            <a href="<%=request.getContextPath() %>/product/toEditProject?id=${product.id}"
+                               class="btn-link">编辑</a>
+                            <a href="<%=request.getContextPath() %>/product/delProduct?id=${product.id}"
+                               class="btn-link" onclick="javascrip:return window.confirm('您确定要删除吗?')">删除</a>
                         </c:if>
-                    </shiro:hasRole>
+                    </shiro:hasAnyRoles >
                 </div>
             </td>
         </tr>
@@ -134,8 +138,10 @@
     </tbody>
 </table>
 <script type="text/javascript" src="<%=request.getContextPath()%>/assets/plugins/jquery/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath() %>/assets/plugins/select2-4.0.2/dist/js/select2.min.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath() %>/assets/plugins/select2-4.0.2/dist/js/i18n/zh-CN.js"></script>
+<script type="text/javascript"
+        src="<%=request.getContextPath() %>/assets/plugins/select2-4.0.2/dist/js/select2.min.js"></script>
+<script type="text/javascript"
+        src="<%=request.getContextPath() %>/assets/plugins/select2-4.0.2/dist/js/i18n/zh-CN.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         $(".placeholder-single").select2({

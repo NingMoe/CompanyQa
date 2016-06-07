@@ -26,6 +26,11 @@
             <li>
                 <a href="<%=request.getContextPath() %>/project/toProjectManager" target="mainFrame">项目管理</a>
             </li>
+            <shiro:hasRole name="admin">
+                <li>
+                    <a href="<%=request.getContextPath() %>/group/toGroupManager" target="mainFrame">分组管理</a>
+                </li>
+            </shiro:hasRole>
         </ul>
     </div>
     <div class="col-md-10">

@@ -99,10 +99,10 @@
         </div>
     </div>
 </form>
-<shiro:hasRole name="tester">
+<shiro:hasAnyRoles  name="tester,admin">
 <input type="button" class="btn btn-default" name="addProject" id="addProject" onclick="window.location.href='<%=request.getContextPath() %>/project/toAddProject'"
        value="添加项目"/>
-</shiro:hasRole>
+</shiro:hasAnyRoles >
 <jsp:include page="projectList.jsp"/>
 
 <script type="text/javascript" src="<%=request.getContextPath() %>/assets/plugins/jquery/jquery-1.11.1.min.js"></script>

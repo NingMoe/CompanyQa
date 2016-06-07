@@ -14,7 +14,7 @@
     <link href="<%=request.getContextPath()%>/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<shiro:hasRole name="tester">
+<shiro:hasAnyRoles  name="tester,admin">
     <input type="button" value="添加/修改缺陷报告" name="addBugReport" id="addBugReport" class="btn btn-default"
            onclick="window.location.href='<%=request.getContextPath() %>/bugReport/toAddBugReport?projectId=${projectId}'">
     <button name="exportExcel" id="exportExcel" class="btn btn-default"
@@ -22,7 +22,7 @@
         导出Excel
     </button>
     <button name="sendMail" id="sendMail" class="btn btn-default" onclick="sendMail()">发送邮件</button>
-</shiro:hasRole>
+</shiro:hasAnyRoles >
 <input type="hidden" name="projectId" id="projectId" value="${projectId}">
 <table class="table-bordered" width="98%">
     <tr>

@@ -33,4 +33,9 @@ public class GroupServiceImp extends GenericServiceImpl<Group, Integer> implemen
     public List<Group> getAllValidGroups() {
         return groupMapper.getAllValidGroups();
     }
+
+    @Override
+    public int recovery(Integer id) {
+        return groupMapper.recoveryByPrimaryKey(id);
+    }
 }

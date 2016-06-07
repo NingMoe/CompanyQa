@@ -58,7 +58,12 @@
     </update>
     <update id="deleteByPrimaryKey" parameterType="Integer">
         update groups
-        set status=0
+        set status=2
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="recoveryByPrimaryKey" parameterType="Integer">
+        update groups
+        set status=1
         where id = #{id,jdbcType=INTEGER}
     </update>
 </mapper>

@@ -51,4 +51,6 @@ public interface GroupMapper extends GenericDao<Group,Integer> {
      * @return
      */
     List<Group> getAllValidGroups();
+
+    int recoveryByPrimaryKey(Integer id);
 }

@@ -268,7 +268,7 @@
     </update>
     <update id="deleteByPrimaryKey" parameterType="Integer">
         update project
-        set status=0
+        set status=2
         where id = #{id,jdbcType=INTEGER}
     </update>
     <select id="selectByPrimaryKey" resultMap="BaseResultMap"

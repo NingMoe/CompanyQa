@@ -20,14 +20,14 @@
 </head>
 <body>
 <div class="form-group">
-    <shiro:hasRole name="tester">
+    <shiro:hasAnyRoles  name="tester,admin">
         <input type="button" value="添加进度报告" name="addProgress" id="addProgress" class="btn btn-default"
                onclick="window.location.href='<%=request.getContextPath() %>/progress/toAddProgress?projectId=${projectId}'">
         <input type="button" value="修改进度报告" name="editProgress" id="editProgress" class="btn btn-default"
                onclick="window.location.href='<%=request.getContextPath() %>/progress/progressList?projectId=${projectId}'">
         <button name="exportExcel" id="exportExcel" class="btn btn-default" onclick="window.location.href='<%=request.getContextPath()%>/progress/exportExcel?projectId=${projectId}'">导出Excel</button>
         <button name="sendMail" id="sendMail" class="btn btn-default" onclick="sendMail()">发送邮件</button>
-    </shiro:hasRole>
+    </shiro:hasAnyRoles >
    <%-- <a href="<%=request.getContextPath() %>/project/toProjectManager">返回</a>--%>
 </div>
 <input type="hidden" name="projectId" id="projectId" value="${projectId}">

@@ -80,14 +80,14 @@
                     </div>
                 <td>
                     <div align="center">
-                        <shiro:hasRole name="tester">
+                        <shiro:hasAnyRoles  name="tester,admin">
                         <a href="<%=request.getContextPath() %>/project/toEditProject?id=${project.id}" class="btn-link">编辑</a>
                         <a href="<%=request.getContextPath() %>/plan/toPlanDetail?projectId=${project.id}" class="btn-link">计划</a>
                         <a href="<%=request.getContextPath() %>/progress/progressDetail?projectId=${project.id}" class="btn-link">进度</a>
                         <a href="<%=request.getContextPath() %>/bugReport/toBugReportDetail?projectId=${project.id}" class="btn-link">缺陷报告</a>
                         <a href="<%=request.getContextPath() %>/project/delProject?id=${project.id}" class="btn-link"
                            onclick="javascript:return confirm('确定要删除吗？')">删除</a>
-                        </shiro:hasRole>
+                        </shiro:hasAnyRoles >
                         <a href="<%=request.getContextPath() %>/project/projectDetail?id=${project.id}" class="btn-link">查看</a>
                     </div>
                 </td>
