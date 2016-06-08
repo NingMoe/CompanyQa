@@ -49,7 +49,7 @@
         </div>
     </div>
     <div class="form-group">
-        <div class="col-sm-5">
+        <div class="col-sm-offset-3">
             <button type="submit" name="submit" id="submit" class="btn btn-default">保存</button>
             <button type="button" name="cancel" id="cancel" class="btn btn-default"
                     onclick="javascript:history.go(-1);">取消

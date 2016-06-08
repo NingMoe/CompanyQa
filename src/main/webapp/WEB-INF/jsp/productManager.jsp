@@ -97,7 +97,7 @@
             </td>
             <td>
                 <div align="center">
-                    <c:forEach items="${allGroups}" var="group">
+                    <c:forEach items="${groups}" var="group">
                         <c:choose>
                             <c:when test="${group.id==product.group}">${group.name}</c:when>
                         </c:choose>

@@ -13,9 +13,11 @@
     <div class="navbar-header">
         <span><h3>测试平台</h3></span>
     </div>
-    <p class="navbar-text pull-right">
-        ${sessionScope.user.userInfo.name}<a href="<%=request.getContextPath() %>/logout" class="navbar-link">logout</a>
-    </p>
+    <div class="navbar-text pull-right">
+        <span style="font-size: larger">
+           ${sessionScope.user.userInfo.name}&nbsp;&nbsp;<a href="<%=request.getContextPath() %>/logout" class="navbar-link">logout</a>
+       </span>
+    </div>
 </nav>
 <div class="row">
     <div class="col-md-2">
