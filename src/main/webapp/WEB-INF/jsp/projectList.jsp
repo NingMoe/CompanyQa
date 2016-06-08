@@ -78,6 +78,7 @@
                             </c:choose>
                         </c:forEach>
                     </div>
+                </td>
                 <td>
                     <div align="center">
                         <shiro:hasAnyRoles  name="tester,admin">

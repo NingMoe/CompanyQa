@@ -30,6 +30,9 @@
                 <li>
                     <a href="<%=request.getContextPath() %>/group/toGroupManager" target="mainFrame">分组管理</a>
                 </li>
+                <li>
+                    <a href="<%=request.getContextPath() %>/user/toSecurityManager" target="mainFrame">权限管理</a>
+                </li>
             </shiro:hasRole>
         </ul>
     </div>

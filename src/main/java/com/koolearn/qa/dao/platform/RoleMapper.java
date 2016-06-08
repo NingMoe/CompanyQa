@@ -18,4 +18,10 @@ public interface RoleMapper {
      * @return
      */
     List<Role> selectRolesByUserName(String userName);
+
+    /**
+     * 查询所有记录
+     * @return
+     */
+    List<Role> selectAllRoles();
 }

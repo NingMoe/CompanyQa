@@ -11,38 +11,43 @@ import java.util.Map;
  * @description
  * @date 2016/4/21
  */
-public interface IProjectService extends GenericService<Project,Integer> {
+public interface IProjectService extends GenericService<Project, Integer> {
     /**
      * 根据检索条件查询
+     *
      * @param map
      * @return
      */
-     List<Project> getProjectsByConditions(Map<String,Object> map);
+    List<Project> getProjectsByConditions(Map<String, Object> map);
 
     /**
      * 根据系统id查询
+     *
      * @param productId
      * @return
      */
-     List<Project> getProjectsByProductId(Integer productId);
+    List<Project> getProjectsByProductId(Integer productId);
 
     /**
      * 查询所有
+     *
      * @return
      */
-     List<Project> getAllProjects();
+    List<Project> getAllProjects();
 
     /**
-     *查询所有有效记录
+     * 查询所有有效记录
+     *
      * @return
      */
     List<Project> getAllValidProjects();
 
     /**
      * 更新所有字段
+     *
      * @param project
      * @return
      */
-    public int updateByPrimaryKey(Project project);
+    int updateByPrimaryKey(Project project);
 
 }

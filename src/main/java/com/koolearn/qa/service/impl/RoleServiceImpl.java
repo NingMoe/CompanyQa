@@ -23,4 +23,9 @@ public class RoleServiceImpl implements IRoleService {
         return roleMapper.selectRolesByUserName(userName);
     }
 
+    @Override
+    public List<Role> selectAllRoles() {
+        return roleMapper.selectAllRoles();
+    }
+
 }

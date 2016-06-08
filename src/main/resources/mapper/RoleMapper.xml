@@ -10,6 +10,9 @@
     <!-- 通过用户 查询用户 拥有的角色 -->
     <select id="selectRolesByUserName" resultMap="BaseResultMap" parameterType="java.lang.String">
         SELECT r.* FROM role r LEFT JOIN user_role ur ON r.id = ur.role_id
-        WHERE ur.user_name = #{user_name,jdbcType=VARCHAR}
+        WHERE ur.user_name = #{user_name,jdbcType=VARCHAR};
+    </select>
+    <select id="selectAllRoles" resultMap="BaseResultMap">
+        select * from role;
     </select>
 </mapper>
