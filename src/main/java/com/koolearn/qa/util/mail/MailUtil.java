@@ -26,7 +26,7 @@ public class MailUtil {
         final String password = mail.getPassword();
         // 如果需要身份认证，根据邮件会话属性和密码验证器构造一个发送邮件的session
         if(mail.isValidate()){
-            sendMailSession = Session.getDefaultInstance(pro, new Authenticator() {
+            sendMailSession = Session.getInstance(pro, new Authenticator() {
                 public PasswordAuthentication getPasswordAuthentication() {
                     return new PasswordAuthentication(username, password);
                 }
