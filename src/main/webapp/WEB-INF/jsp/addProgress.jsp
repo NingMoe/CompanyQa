@@ -23,7 +23,7 @@
         <div class="col-sm-5">
             <div class="input-group date form_date" data-date="" data-date-format="yyyy-mm-dd"
                  data-link-field="dtp_input2" data-link-format="yyyy-mm-dd">
-                <input class="form-control" size="16" type="text" onchange="loadMantis()" name="date" id="date"
+                <input class="form-control" size="16" type="text" onchange="loadBugStatistics()" name="date" id="date"
                        value="${date}"
                        readonly>
                 <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
@@ -51,41 +51,41 @@
     <div class="form-group">
         <label class="col-sm-2 control-label" for="newBugs"><span style="color:red;">*</span>新提交bug数</label>
         <div class="col-sm-5">
-            <input type="text" name="newBugs" id="newBugs" class="form-control" value="${mantis.newBugs}"/>
+            <input type="text" name="newBugs" id="newBugs" class="form-control" value="${bugStatistics.newBugs}"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label" for="assignedBugs"><span style="color:red;">*</span>已指派bug数</label>
         <div class="col-sm-5">
             <input type="text" name="assignedBugs" id="assignedBugs" class="form-control"
-                   value="${mantis.assignedBugs}"/>
+                   value="${bugStatistics.assignedBugs}"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label" for="confirmedBugs"><span style="color:red;">*</span>已确认bug数</label>
         <div class="col-sm-5">
             <input type="text" name="confirmedBugs" id="confirmedBugs" class="form-control"
-                   value="${mantis.confirmedBugs}"/>
+                   value="${bugStatistics.confirmedBugs}"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label" for="resolvedBugs"><span style="color:red;">*</span>已解决bug数</label>
         <div class="col-sm-5">
             <input type="text" name="resolvedBugs" id="resolvedBugs" class="form-control"
-                   value="${mantis.resolvedBugs}"/>
+                   value="${bugStatistics.resolvedBugs}"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label" for="feedbackBugs"><span style="color:red;">*</span>反馈bug数</label>
         <div class="col-sm-5">
             <input type="text" name="feedbackBugs" id="feedbackBugs" class="form-control"
-                   value="${mantis.feedbackBugs}"/>
+                   value="${bugStatistics.feedbackBugs}"/>
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label" for="closedBugs"><span style="color:red;">*</span>已关闭bug数</label>
         <div class="col-sm-5">
-            <input type="text" name="closedBugs" id="closedBugs" class="form-control" value="${mantis.closedBugs}"/>
+            <input type="text" name="closedBugs" id="closedBugs" class="form-control" value="${bugStatistics.closedBugs}"/>
         </div>
     </div>
     <div class="form-group">
@@ -120,11 +120,11 @@
     });
 </script>
 <script type="text/javascript">
-    function loadMantis() {
+    function loadBugStatistics() {
         var projectId = document.getElementById("projectId").value;
         var date = document.getElementById("date").value;
         $.ajax({
-            url: "<%=request.getContextPath() %>/progress/getMantis",
+            url: "<%=request.getContextPath() %>/progress/getBugStatistics",
             type: "post",
             data: "projectId=" + projectId + "&date=" + date,
             // datatype: "json",
@@ -135,16 +135,16 @@
                         document.getElementById("date").value = document.getElementById("dateBefore").value;
                         alert(data.errMsg);
                     } else {
-                        if (data.mantis != null) {
+                        if (data.bugStatistics != null) {
                             document.getElementById("dateBefore").value = date;
-                            document.getElementById("newBugs").value = data.mantis.newBugs;
-                            document.getElementById("assignedBugs").value = data.mantis.assignedBugs;
-                            document.getElementById("confirmedBugs").value = data.mantis.confirmedBugs;
-                            document.getElementById("resolvedBugs").value = data.mantis.resolvedBugs;
-                            document.getElementById("feedbackBugs").value = data.mantis.feedbackBugs;
-                            document.getElementById("closedBugs").value = data.mantis.closedBugs;
+                            document.getElementById("newBugs").value = data.bugStatistics.newBugs;
+                            document.getElementById("assignedBugs").value = data.bugStatistics.assignedBugs;
+                            document.getElementById("confirmedBugs").value = data.bugStatistics.confirmedBugs;
+                            document.getElementById("resolvedBugs").value = data.bugStatistics.resolvedBugs;
+                            document.getElementById("feedbackBugs").value = data.bugStatistics.feedbackBugs;
+                            document.getElementById("closedBugs").value = data.bugStatistics.closedBugs;
                         } else {
-                            alert("未查询到mantis记录！");
+                            alert("未查询到记录！");
                         }
                     }
                 } else {

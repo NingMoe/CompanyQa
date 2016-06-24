@@ -1,9 +1,12 @@
 package com.koolearn.qa.service.impl;
 
+import com.koolearn.qa.constant.BugPlatformEnum;
+import com.koolearn.qa.dao.jira.JiraMapper;
 import com.koolearn.qa.dao.mantis.MantisMapper;
 import com.koolearn.qa.dao.platform.ProgressMapper;
 import com.koolearn.qa.generic.GenericDao;
 import com.koolearn.qa.generic.GenericServiceImpl;
+import com.koolearn.qa.model.BugStatistics;
 import com.koolearn.qa.model.Mantis;
 import com.koolearn.qa.model.Progress;
 import com.koolearn.qa.model.Project;
@@ -45,6 +48,9 @@ public class ProgressServiceImpl extends GenericServiceImpl<Progress, Integer> i
     @Autowired
     private MantisMapper mantisMapper;
 
+    @Autowired
+    private JiraMapper jiraMapper;
+
     @Override
     public GenericDao<Progress, Integer> getDao() {
         return progressMapper;
@@ -77,14 +83,19 @@ public class ProgressServiceImpl extends GenericServiceImpl<Progress, Integer> i
         return false;
     }
 
-    public Mantis statisticsBystaticEveryday(Map<String,Object> map) throws UnsupportedEncodingException {
-        if(map.get("version")!=null){
-            map.put("version", new String(map.get("version").toString().getBytes(), "latin1"));
+    public BugStatistics statisticsBystaticEveryday(Map<String,Object> map, int platform) throws UnsupportedEncodingException {
+        if (platform == Integer.valueOf(BugPlatformEnum.mantis.getValue())) {
+            if (map.get("version") != null) {
+                map.put("version", new String(map.get("version").toString().getBytes(), "latin1"));
+            }
+            if (map.get("category") != null) {
+                map.put("category", new String(map.get("category").toString().getBytes(), "latin1"));
+            }
+            return mantisMapper.statisticsEveryday(map);
+        }else if (platform == Integer.valueOf(BugPlatformEnum.jira.getValue())) {
+            return jiraMapper.statisticsEveryday(map);
         }
-       if(map.get("category")!=null){
-           map.put("category", new String(map.get("category").toString().getBytes(), "latin1"));
-       }
-        return mantisMapper.statisticsEveryday(map);
+        return null;
     }
 
     public String transHtmlContent(Project project,List<Progress> list){
@@ -123,7 +134,7 @@ public class ProgressServiceImpl extends GenericServiceImpl<Progress, Integer> i
         try {
             OutputStream output = response.getOutputStream();
             response.reset();
-            String fileName = project.getName() + "进度报告.xls";
+            String fileName = project.getName() + "测试进度报告.xls";
             response.setHeader("Content-disposition", "attachment;filename=" + new String(fileName.getBytes("utf-8"), "ISO8859-1"));
             response.setContentType("text/html;charset=UTF-8");
             //创建可写入的Excel工作薄，且内容将写入到输出流，并通过输出流输出给客户端浏览

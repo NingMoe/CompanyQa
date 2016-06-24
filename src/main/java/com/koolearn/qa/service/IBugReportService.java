@@ -2,6 +2,7 @@ package com.koolearn.qa.service;
 
 import com.koolearn.qa.generic.GenericService;
 import com.koolearn.qa.model.BugReport;
+import com.koolearn.qa.model.BugStatistics;
 import com.koolearn.qa.model.Mantis;
 import com.koolearn.qa.model.Project;
 
@@ -15,8 +16,10 @@ import java.util.Map;
  * @date 2016/4/21
  */
 public interface IBugReportService extends GenericService<BugReport,Integer> {
+
     /**
      * 按照项目查询测试报告记录
+     * @param projectId
      * @return
      */
     BugReport getBugReportByProjectId(Integer projectId);
@@ -33,7 +36,7 @@ public interface IBugReportService extends GenericService<BugReport,Integer> {
      * @param map
      * @return
      */
-    Mantis statisticsBySeriousness(Map<String,Object> map) throws UnsupportedEncodingException;
+    BugStatistics statisticsBySeriousness(Map<String,Object> map,int platform) throws UnsupportedEncodingException;
 
     /**
      * 缺陷报告表格（用于邮件发送）

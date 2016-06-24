@@ -71,16 +71,17 @@ public class ProgressController {
             if (StringUtils.isNotBlank(project.getVersionMantis())) {
                 map.put("version", project.getVersionMantis());
             }
-            request.setAttribute("mantis", progressService.statisticsBystaticEveryday(map));
+            map.put("pKey",project.getpKey());
+            request.setAttribute("bugStatistics", progressService.statisticsBystaticEveryday(map,project.getBugPlatform()));
             request.setAttribute("date", formatter.format(new Date()));
             request.setAttribute("dateBefore", formatter.format(new Date()));
         }
         return "/addProgress";
     }
 
-    @RequestMapping("/getMantis")
+    @RequestMapping("/getBugStatistics")
     @ResponseBody
-    public Map<String, Object> getMantis(HttpServletRequest request, HttpServletResponse response) throws ParseException, UnsupportedEncodingException {
+    public Map<String, Object> getBugStatistics(HttpServletRequest request, HttpServletResponse response) throws ParseException, UnsupportedEncodingException {
         Map<String, Object> message = new HashMap<>();
         String projectId = request.getParameter("projectId");
         String date = request.getParameter("date");
@@ -109,7 +110,8 @@ public class ProgressController {
         if (StringUtils.isNotBlank(project.getVersionMantis())) {
             map.put("version", project.getVersionMantis());
         }
-        message.put("mantis", progressService.statisticsBystaticEveryday(map));
+        map.put("pKey",project.getpKey());
+        message.put("bugStatistics", progressService.statisticsBystaticEveryday(map,project.getBugPlatform()));
         return message;
     }
 
@@ -216,7 +218,7 @@ public class ProgressController {
             ccAddress = CommonUtil.list_unique(ccAddress);//去重
             ccAddress.removeAll(toAddress);//去除与发送地址相同的数据
             mail.setCcAddress(ccAddress);
-            mail.setSubject(project.getName() + "进度报告");
+            mail.setSubject(project.getName() + "测试进度报告");
             mail.setContent(progressService.transHtmlContent(project,list));
             String attachFileName = progressService.generateExcelFile(project, list);
             if(attachFileName != null){

@@ -1,6 +1,7 @@
 package com.koolearn.qa.service;
 
 import com.koolearn.qa.generic.GenericService;
+import com.koolearn.qa.model.BugStatistics;
 import com.koolearn.qa.model.Mantis;
 import com.koolearn.qa.model.Progress;
 import com.koolearn.qa.model.Project;
@@ -43,7 +44,7 @@ public interface IProgressService extends GenericService<Progress,Integer> {
      * @param map
      * @return
      */
-    Mantis statisticsBystaticEveryday(Map<String,Object> map) throws UnsupportedEncodingException;
+    BugStatistics statisticsBystaticEveryday(Map<String,Object> map, int platform) throws UnsupportedEncodingException;
 
     /**
      * html邮件内容

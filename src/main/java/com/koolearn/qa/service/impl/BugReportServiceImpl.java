@@ -1,10 +1,13 @@
 package com.koolearn.qa.service.impl;
 
+import com.koolearn.qa.constant.BugPlatformEnum;
+import com.koolearn.qa.dao.jira.JiraMapper;
 import com.koolearn.qa.dao.mantis.MantisMapper;
 import com.koolearn.qa.dao.platform.BugReportMapper;
 import com.koolearn.qa.generic.GenericDao;
 import com.koolearn.qa.generic.GenericServiceImpl;
 import com.koolearn.qa.model.BugReport;
+import com.koolearn.qa.model.BugStatistics;
 import com.koolearn.qa.model.Mantis;
 import com.koolearn.qa.model.Project;
 import com.koolearn.qa.service.IBugReportService;
@@ -44,6 +47,9 @@ public class BugReportServiceImpl extends GenericServiceImpl<BugReport, Integer>
     @Autowired
     private MantisMapper mantisMapper;
 
+    @Autowired
+    private JiraMapper jiraMapper;
+
     @Override
     public GenericDao<BugReport, Integer> getDao() {
         return bugReportMapper;
@@ -64,14 +70,19 @@ public class BugReportServiceImpl extends GenericServiceImpl<BugReport, Integer>
         return false;
     }
 
-    public Mantis statisticsBySeriousness(Map<String, Object> map) throws UnsupportedEncodingException {
-        if (map.get("version") != null) {
-            map.put("version", new String(map.get("version").toString().getBytes(), "latin1"));
+    public BugStatistics statisticsBySeriousness(Map<String, Object> map, int platform) throws UnsupportedEncodingException {
+        if (platform == Integer.valueOf(BugPlatformEnum.mantis.getValue())) {
+            if (map.get("version") != null) {
+                map.put("version", new String(map.get("version").toString().getBytes(), "latin1"));
+            }
+            if (map.get("category") != null) {
+                map.put("category", new String(map.get("category").toString().getBytes(), "latin1"));
+            }
+            return mantisMapper.statisticsBySeriousness(map);
+        } else if (platform == Integer.valueOf(BugPlatformEnum.jira.getValue())) {
+            return jiraMapper.statisticsBySeriousness(map);
         }
-        if (map.get("category") != null) {
-            map.put("category", new String(map.get("category").toString().getBytes(), "latin1"));
-        }
-        return mantisMapper.statisticsBySeriousness(map);
+        return null;
     }
 
     public String transHtmlContent(Project project, BugReport bugReport) {

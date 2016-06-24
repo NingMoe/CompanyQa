@@ -15,13 +15,19 @@ public class Project {
     private int productId;
     //项目名称
     private String name;
+    //bug统计平台
+    private int bugPlatform;
+
     //mantis项目id
     private int projectMantis;
-
     //mantis项目分类
     private String categoryMantis;
     //mantis版本号
     private String versionMantis;
+
+    //jira键值
+    private String pKey;
+
     //产品人员
     private String producter;
     //开发人员
@@ -81,6 +87,14 @@ public class Project {
         this.name = name;
     }
 
+    public int getBugPlatform() {
+        return bugPlatform;
+    }
+
+    public void setBugPlatform(int bugPlatform) {
+        this.bugPlatform = bugPlatform;
+    }
+
     public int getProjectMantis() {
         return projectMantis;
     }
@@ -103,6 +117,14 @@ public class Project {
 
     public void setVersionMantis(String versionMantis) {
         this.versionMantis = versionMantis;
+    }
+
+    public String getpKey() {
+        return pKey;
+    }
+
+    public void setpKey(String pKey) {
+        this.pKey = pKey;
     }
 
     public String getProducter() {
@@ -251,9 +273,11 @@ public class Project {
                 "id=" + id +
                 ", productId=" + productId +
                 ", name='" + name + '\'' +
+                ",bugPlatform='"+bugPlatform+'\'' +
                 ", projectMantis='" + projectMantis + '\'' +
                 ", categoryMantis='" + categoryMantis + '\'' +
                 ", versionMantis='" + versionMantis + '\'' +
+                ",pKey='"+pKey+'\''+
                 ", producter='" + producter + '\'' +
                 ", developer='" + developer + '\'' +
                 ", tester='" + tester + '\'' +

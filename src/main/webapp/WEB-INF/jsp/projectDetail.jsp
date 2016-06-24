@@ -15,7 +15,7 @@
 </head>
 <body>
 <div class="panel panel-default col-md-11">
-<a href="javascript:history.go(-1);" class="col-md-offset-9" style="text-align: end"><h4>返回</h4></a>
+    <a href="javascript:history.go(-1);" class="col-md-offset-9" style="text-align: end"><h4>返回</h4></a>
 </div>
 <div class="panel panel-default col-md-11">
     <div class="panel-heading">
@@ -28,17 +28,37 @@
             <div class="form-group">
                 <label class="col-md-2 control-label" for="name">项目名称:</label>
                 <label id="name" class="col-md-2 control-label" style="text-align:left">${project.name}</label>
-                <label class="col-md-2 control-label" for="projectMantis">mantis项目id:</label>
-                <label id="projectMantis" class="col-md-2 control-label"
-                       style="text-align:left">${project.projectMantis}</label>
-                <label class="col-md-2 control-label" for="categoryMantis">mantis项目分类:</label>
-                <label id="categoryMantis" class="col-md-2 control-label"
-                       style="text-align:left">${project.categoryMantis}</label>
+                <label class="col-md-2 control-label" for="bugPlatform">bug平台:</label>
+                <label id="bugPlatform" class="col-md-2 control-label"
+                       style="text-align:left">
+                    <c:forEach items="${bugPlatform}" var="platform">
+                        <c:choose>
+                            <c:when test="${platform.value==project.bugPlatform}">${platform.text}</c:when>
+                        </c:choose>
+                    </c:forEach>
+                </label>
+                <c:if test="${project.bugPlatform==1}">
+                    <label class="col-md-2 control-label" for="projectMantis">mantis项目id:</label>
+                    <label id="projectMantis" class="col-md-2 control-label"
+                           style="text-align:left">${project.projectMantis}</label>
+                </c:if>
+                <c:if test="${project.bugPlatform==2}">
+                    <label class="col-md-2 control-label" for="pKey">jira键值:</label>
+                    <label id="pKey" class="col-md-2 control-label"
+                           style="text-align:left">${project.pKey}</label>
+                </c:if>
             </div>
+            <c:if test="${project.bugPlatform==1}">
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="categoryMantis">mantis项目分类:</label>
+                    <label id="categoryMantis" class="col-md-2 control-label"
+                           style="text-align:left">${project.categoryMantis}</label>
+                    <label class="col-md-2 control-label" for="versionMantis">mantis版本号:</label>
+                    <label id="versionMantis" class="col-md-2 control-label"
+                           style="text-align:left">${project.versionMantis}</label>
+                </div>
+            </c:if>
             <div class="form-group">
-                <label class="col-md-2 control-label" for="versionMantis">mantis版本号:</label>
-                <label id="versionMantis" class="col-md-2 control-label"
-                       style="text-align:left">${project.versionMantis}</label>
                 <label class="col-md-2 control-label" for="productId">所属系统:</label>
                 <label id="productId" class="col-md-2 control-label" style="text-align:left">
                     <c:forEach var="productMap" items="${productMap}">
@@ -48,52 +68,50 @@
                 <label class="col-md-2 control-label">产品人员:</label>
                 <label id="producter" class="col-md-2 control-label"
                        style="text-align:left">${project.producter}</label>
-            </div>
-            <div class="form-group">
                 <label class="col-md-2 col-sm-offset-0 control-label" for="developer">开发人员:</label>
                 <label id="developer" class="col-md-2 control-label"
                        style="text-align:left">${project.developer}</label>
+            </div>
+            <div class="form-group">
                 <label class="col-md-2 control-label" for="tester">测试人员:</label>
                 <label id="tester" class="col-md-2 control-label" style="text-align:left">${project.tester}</label>
                 <label class="col-md-2 control-label" for="startTime2plan">计划开始时间:</label>
                 <label id="startTime2plan" class="col-md-2 control-label"
                        style="text-align:left">${project.startTime2plan}</label>
-            </div>
-            <div class="form-group">
                 <label class="col-md-2 control-label" for="endTime2plan">计划结束时间:</label>
                 <label id="endTime2plan" class="col-md-2 control-label"
                        style="text-align:left">${project.endTime2plan}</label>
+            </div>
+            <div class="form-group">
                 <label class="col-md-2 control-label" for="startTime2actual">实际开始时间:</label>
                 <label id="startTime2actual" class="col-md-2 control-label"
                        style="text-align:left">${project.startTime2actual}</label>
                 <label class="col-md-2 control-label" for="endTime2actual">实际结束时间:</label>
                 <label id="endTime2actual" class="col-md-2 control-label"
                        style="text-align:left">${project.endTime2actual}</label>
-            </div>
-            <div class="form-group">
                 <label class="col-md-2 control-label" for="projectStatus">项目完成状态:</label>
                 <label id="projectStatus" class="col-md-2 control-label" style="text-align:left">
                     <c:forEach var="projectStatus" items="${projectStatus}">
                         <c:if test="${project.projectStatus==projectStatus.value}">${projectStatus.text}</c:if>
                     </c:forEach>
                 </label>
+            </div>
+            <div class="form-group">
                 <label class="col-md-2 control-label" for="days">提前/延期天数:</label>
                 <label id="days" class="col-md-2 control-label" style="text-align:left">${project.days}</label>
                 <label class="col-md-2 control-label" for="requirementDays">需求阶段天数:</label>
                 <label id="requirementDays" class="col-md-2 control-label"
                        style="text-align:left">${project.requirementDays}</label>
-            </div>
-            <div class="form-group">
                 <label class="col-md-2 control-label" for="developDays">代码阶段天数:</label>
                 <label id="developDays" class="col-md-2 control-label"
                        style="text-align:left">${project.developDays}</label>
+            </div>
+            <div class="form-group">
                 <label class="col-md-2 control-label" for="testDays">测试阶段天数:</label>
                 <label id="testDays" class="col-md-2 control-label" style="text-align:left">${project.testDays}</label>
                 <label class="col-md-2 control-label" for="acceptanceDays">业务验收阶段天数:</label>
                 <label id="acceptanceDays" class="col-md-2 control-label"
                        style="text-align:left">${project.acceptanceDays}</label>
-            </div>
-            <div class="form-group">
                 <label class="col-md-2 control-label" for="onlineDays">上线试运行阶段天数:</label>
                 <label id="onlineDays" class="col-md-2 control-label"
                        style="text-align:left">${project.onlineDays}</label>

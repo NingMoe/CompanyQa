@@ -1,21 +1,17 @@
 package com.koolearn.qa.model;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * @author lihuiyan
  * @description
- * @date 2016/4/28
+ * @date 2016/6/21
  */
-public class Mantis extends BugStatistics{
+public class Jira extends BugStatistics{
     //项目id
     private int project_id;
-    //项目分类
-    private String category;
-    //版本号
+    //项目键值
+    private String pKey;
+    //版本名称
     private String version;
-
 
     public int getProject_id() {
         return project_id;
@@ -25,12 +21,12 @@ public class Mantis extends BugStatistics{
         this.project_id = project_id;
     }
 
-    public String getCategory() {
-        return category;
+    public String getpKey() {
+        return pKey;
     }
 
-    public void setCategory(String category) {
-        this.category = category;
+    public void setpKey(String pKey) {
+        this.pKey = pKey;
     }
 
     public String getVersion() {
@@ -41,14 +37,11 @@ public class Mantis extends BugStatistics{
         this.version = version;
     }
 
-
-
-
     @Override
     public String toString() {
-        return "Mantis{" +
+        return "Jira{" +
                 "project_id=" + project_id +
-                ", category='" + category + '\'' +
+                ", pKey='" + pKey + '\'' +
                 ", version='" + version + '\'' +
                 ", date=" + getDate() +
                 ", newBugs=" + newBugs +

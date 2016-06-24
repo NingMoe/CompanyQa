@@ -2,6 +2,7 @@ package com.koolearn.qa.controller;
 
 import com.koolearn.ldap.dto.LdapUser;
 import com.koolearn.ldap.service.LdapService;
+import com.koolearn.qa.constant.BugPlatformEnum;
 import com.koolearn.qa.constant.Constant;
 import com.koolearn.qa.model.*;
 import com.koolearn.qa.service.IBugReportService;
@@ -86,11 +87,12 @@ public class BugReportController {
             if (StringUtils.isNotBlank(project.getVersionMantis())) {
                 map.put("version", project.getVersionMantis());
             }
-            Mantis mantis = bugReportService.statisticsBySeriousness(map);
-            if (mantis == null) {
-                System.out.println("出错啦，未查询到mantis记录");
+            map.put("pKey",project.getpKey());
+            BugStatistics bugStatistics = bugReportService.statisticsBySeriousness(map,project.getBugPlatform());
+            if (bugStatistics == null) {
+                System.out.println("出错啦，未查询到记录");
             } else {
-                bugReport = mantisTransformBugReport(mantis);
+                bugReport = tranToBugReport(bugStatistics);
             }
         }
         request.setAttribute("bugReport", bugReport);
@@ -163,15 +165,15 @@ public class BugReportController {
         return bugReport;
     }
 
-    private BugReport mantisTransformBugReport(Mantis mantis) {
+    private BugReport tranToBugReport(BugStatistics bugStatistics) {
         BugReport bugReport = new BugReport();
-        bugReport.setSeriousBugs(mantis.getSeriousBugs());
-        bugReport.setSecondaryBugs(mantis.getSecondaryBugs());
-        bugReport.setGeneralBugs(mantis.getGeneralBugs());
-        bugReport.setLayoutBugs(mantis.getLayoutBugs());
-        bugReport.setTextBugs(mantis.getTextBugs());
-        bugReport.setNewfeatureBugs(mantis.getNewfeatureBugs());
-        bugReport.setTotalBugs(mantis.getTotalBugs());
+        bugReport.setSeriousBugs(bugStatistics.getSeriousBugs());
+        bugReport.setSecondaryBugs(bugStatistics.getSecondaryBugs());
+        bugReport.setGeneralBugs(bugStatistics.getGeneralBugs());
+        bugReport.setLayoutBugs(bugStatistics.getLayoutBugs());
+        bugReport.setTextBugs(bugStatistics.getTextBugs());
+        bugReport.setNewfeatureBugs(bugStatistics.getNewfeatureBugs());
+        bugReport.setTotalBugs(bugStatistics.getTotalBugs());
         return bugReport;
     }
 

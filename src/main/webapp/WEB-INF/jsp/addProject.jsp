@@ -12,28 +12,46 @@
     <title>添加项目</title>
     <link href="<%=request.getContextPath() %>/assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="<%=request.getContextPath() %>/assets/plugins/select2-4.0.2/dist/css/select2.min.css" rel="stylesheet">
-    <link href="<%=request.getContextPath() %>/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css" rel="stylesheet">
+    <link href="<%=request.getContextPath() %>/assets/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.css"
+          rel="stylesheet">
 </head>
 <body>
-<form action="<%=request.getContextPath()%>/project/addProject" class="form-horizontal" role="form" method="post" onsubmit="return check()" style="width: 98%">
+<form action="<%=request.getContextPath()%>/project/addProject" class="form-horizontal" role="form" method="post"
+      onsubmit="return check()" style="width: 98%">
     <div class="form-group">
         <label class="col-sm-2 control-label" for="name"><span style="color:red;">*</span>项目名称</label>
         <div class="col-sm-3">
             <input type="text" class="form-control" name="name" id="name" value=""/>
         </div>
-        <label class="col-sm-2 control-label" for="projectMantis"><span style="color:red;">*</span>mantis项目id</label>
+        <label class="col-sm-2 control-label" for="bugPlatform"><span style="color:red;">*</span>bug平台</label>
         <div class="col-sm-3">
-            <input type="text" class="form-control" name="projectMantis" id="projectMantis" value=""/>
+            <select name="bugPlatform" id="bugPlatform" class="form-control">
+                <option></option>
+                <c:forEach var="bugPlatform" items="${bugPlatform}">
+                    <option value="${bugPlatform.value}">${bugPlatform.text}</option>
+                </c:forEach>
+            </select>
         </div>
     </div>
-    <div class="form-group">
+    <div class="form-group" id="mantis" hidden="hidden">
+        <label class="col-sm-2 control-label" for="projectMantis"><span style="color:red;">*</span>mantis项目id</label>
+        <div class="col-sm-1">
+            <input type="text" class="form-control" name="projectMantis" id="projectMantis" value=""/>
+        </div>
         <label class="col-sm-2 control-label" for="categoryMantis">mantis项目分类</label>
-        <div class="col-sm-3">
+        <div class="col-sm-2">
             <input type="text" class="form-control" name="categoryMantis" id="categoryMantis" value=""/>
         </div>
-        <label class="col-sm-2 control-label" for="versionMantis">mantis版本号</label>
-        <div class="col-sm-3">
+        <label class="col-sm-1 control-label" for="versionMantis">mantis版本号</label>
+        <div class="col-sm-2">
             <input type="text" class="form-control" name="versionMantis" id="versionMantis" value=""/>
+        </div>
+    </div>
+
+    <div class="form-group" id="jira" hidden="hidden">
+        <label class="col-sm-2 control-label" for="pKey"><span style="color:red;">*</span>jira键值</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" name="pKey" id="pKey" value=""/>
         </div>
     </div>
     <div class="form-group">
@@ -80,23 +98,23 @@
     <div class="form-group">
         <label class="col-sm-2 control-label" for="startTime2plan">计划开始时间</label>
         <div class="col-sm-3">
-        <div class="input-group date form_datetime" data-date="" data-date-format="yyyy-mm-dd">
-            <input class="form-control" type="text" size="16" name="startTime2plan" id="startTime2plan" value=""
+            <div class="input-group date form_datetime" data-date="" data-date-format="yyyy-mm-dd">
+                <input class="form-control" type="text" size="16" name="startTime2plan" id="startTime2plan" value=""
                        readonly>
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"><span
-                            class="glyphicon fa-times"></span></span></span>
-            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-        </div>
+                    class="glyphicon fa-times"></span></span></span>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
         </div>
         <label class="col-sm-2 control-label" for="endTime2plan">计划结束时间</label>
         <div class="col-sm-3">
-        <div class="input-group date form_datetime" data-date="" data-date-format="yyyy-mm-dd">
-            <input class="form-control" type="text" size="16" name="endTime2plan" id="endTime2plan" value=""
+            <div class="input-group date form_datetime" data-date="" data-date-format="yyyy-mm-dd">
+                <input class="form-control" type="text" size="16" name="endTime2plan" id="endTime2plan" value=""
                        readonly>
             <span class="input-group-addon"><span class="glyphicon glyphicon-remove"><span
-                            class="glyphicon fa-times"></span></span></span>
-            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
-        </div>
+                    class="glyphicon fa-times"></span></span></span>
+                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+            </div>
         </div>
     </div>
     <div class="form-group">
@@ -127,7 +145,8 @@
             <select name="projectStatus" id="projectStatus" class="form-control">
                 <option></option>
                 <c:forEach var="projectStatus" items="${projectStatus}">
-                    <option value="${projectStatus.value}" <c:if test="${project.projectStatus==projectStatus.value}">selected</c:if>>${projectStatus.text}</option>
+                    <option value="${projectStatus.value}"
+                            <c:if test="${project.projectStatus==projectStatus.value}">selected</c:if>>${projectStatus.text}</option>
                 </c:forEach>
             </select>
         </div>
@@ -172,15 +191,21 @@
     <div class="form-group">
         <div class="col-sm-offset-4 col-sm-6">
             <button type="submit" name="submit" id="submit" class="btn btn-default">保存</button>
-            <button type="button" name="cancel" id="cancel" class="btn btn-default" onclick="javascript:history.go(-1);document.getElementById('cancel').style.display = 'none';">取消</button>
+            <button type="button" name="cancel" id="cancel" class="btn btn-default"
+                    onclick="javascript:history.go(-1);document.getElementById('cancel').style.display = 'none';">取消
+            </button>
         </div>
     </div>
 </form>
 <script type="text/javascript" src="<%=request.getContextPath() %>/assets/plugins/jquery/jquery-1.11.1.min.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath() %>/assets/plugins/select2-4.0.2/dist/js/select2.min.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath() %>/assets/plugins/select2-4.0.2/dist/js/i18n/zh-CN.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath() %>/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="<%=request.getContextPath() %>/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"
+<script type="text/javascript"
+        src="<%=request.getContextPath() %>/assets/plugins/select2-4.0.2/dist/js/select2.min.js"></script>
+<script type="text/javascript"
+        src="<%=request.getContextPath() %>/assets/plugins/select2-4.0.2/dist/js/i18n/zh-CN.js"></script>
+<script type="text/javascript"
+        src="<%=request.getContextPath() %>/assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript"
+        src="<%=request.getContextPath() %>/assets/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.js"
         charset="UTF-8"></script>
 <script type="text/javascript"
         src="<%=request.getContextPath() %>/assets/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"
@@ -212,9 +237,18 @@
             document.getElementById('name').focus();
             return false;
         }
-        if (document.getElementById('projectMantis').value == "") {
+        if (document.getElementById('bugPlatform').value == "") {
+            alert("bug平台不能为空！");
+            document.getElementById('bugPlatform').focus();
+            return false;
+        }
+        if (document.getElementById('bugPlatform').value == 1 && document.getElementById('projectMantis').value == "") {
             alert("mantis项目id不能为空！");
             document.getElementById('projectMantis').focus();
+            return false;
+        } else if (document.getElementById('bugPlatform').value == 2 && document.getElementById('projectJira').value == "") {
+            alert("jira键值不能为空！");
+            document.getElementById('projectJira').focus();
             return false;
         }
         if (document.getElementById("productId").value == "") {
@@ -223,43 +257,61 @@
             return false;
         }
         var days = document.getElementById("days").value;
-        if(days != "" && isNaN(days)){
+        if (days != "" && isNaN(days)) {
             alert("提前/延期天数只能为数字");
             document.getElementById('days').focus();
             return false;
         }
         var requirementDays = document.getElementById("requirementDays").value;
-        if(requirementDays != "" && isNaN(requirementDays)){
+        if (requirementDays != "" && isNaN(requirementDays)) {
             alert("需求阶段天数只能为数字");
             document.getElementById("requirementDays").focus();
             return false;
         }
         var developDays = document.getElementById("developDays").value;
-        if(developDays != "" && isNaN(developDays)){
+        if (developDays != "" && isNaN(developDays)) {
             alert("代码阶段天数只能为数字");
             document.getElementById("developDays").focus();
             return false;
         }
         var testDays = document.getElementById("testDays").value;
-        if(testDays != "" && isNaN(testDays)){
+        if (testDays != "" && isNaN(testDays)) {
             alert("测试阶段天数只能为数字");
             document.getElementById("testDays").focus();
             return false;
         }
         var acceptanceDays = document.getElementById("acceptanceDays").value;
-        if(acceptanceDays != "" && isNaN(acceptanceDays)){
+        if (acceptanceDays != "" && isNaN(acceptanceDays)) {
             alert("业务验收阶段天数只能为数字");
             document.getElementById("acceptanceDays").focus();
             return false;
         }
         var onlineDays = document.getElementById("onlineDays").value;
-        if(onlineDays != "" && isNaN(onlineDays)){
+        if (onlineDays != "" && isNaN(onlineDays)) {
             alert("上线试运行阶段天数只能为数字");
             document.getElementById("onlineDays").focus();
             return false;
         }
         return true;
     }
+</script>
+<script type="text/javascript">
+    $(function () {
+        $("#bugPlatform").change(
+                function () {
+                    var t = $("#bugPlatform").val();
+                    if (t == 1) {
+                        $('#jira').hide();
+                        $('#mantis').show();
+                    } else if (t == 2) {
+                        $('#mantis').hide();
+                        $('#jira').show();
+                    } else {
+                        $('#mantis').hide();
+                        $('#jira').hide();
+                    }
+                });
+    });
 </script>
 </body>
 </html>

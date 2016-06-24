@@ -1,5 +1,7 @@
 package com.koolean.qa.test.service;
 
+import com.koolearn.qa.constant.BugPlatformEnum;
+import com.koolearn.qa.model.BugStatistics;
 import com.koolearn.qa.model.Mantis;
 import com.koolearn.qa.model.Progress;
 import com.koolearn.qa.service.IProgressService;
@@ -97,7 +99,7 @@ public class ProgressServiceTest {
        // map.put("version", new String("一期".getBytes(), "latin1"));
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         map.put("date", formatter.parse("2016-05-03"));
-        Mantis mantis = progressService.statisticsBystaticEveryday(map);
+        BugStatistics mantis = progressService.statisticsBystaticEveryday(map, Integer.valueOf(BugPlatformEnum.mantis.getValue()));
         Assert.assertNotNull("<<<<<<<<<<<<<<<<<<<<数据库返回信息为空", mantis);
         System.out.println("<<<<<<<<<<<<<<<<<<<<" + mantis.toString());
     }

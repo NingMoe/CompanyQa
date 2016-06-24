@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.koolearn.qa.dao.jira.JiraMapper">
+
+    <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/>
+    <resultMap id="BaseResultMap" type="com.koolearn.qa.model.Jira">
+        <result column="project" property="project_id" jdbcType="INTEGER"/>
+        <result column="pKey" property="pKey" jdbcType="VARCHAR"/>
+        <result column="vname" property="version" jdbcType="VARCHAR"/>
+        <result column="date" property="date" jdbcType="DATE"/>
+        <result column="newBugs" property="newBugs" jdbcType="INTEGER"/>
+        <result column="assignedBugs" property="assignedBugs" jdbcType="INTEGER"/>
+        <result column="confirmedBugs" property="confirmedBugs" jdbcType="INTEGER"/>
+        <result column="resolvedBugs" property="resolvedBugs" jdbcType="INTEGER"/>
+        <result column="feedbackBugs" property="feedbackBugs" jdbcType="INTEGER"/>
+        <result column="closedBugs" property="closedBugs" jdbcType="INTEGER"/>
+        <result column="seriousBugs" property="seriousBugs" jdbcType="INTEGER"/>
+        <result column="secondaryBugs" property="secondaryBugs" jdbcType="INTEGER"/>
+        <result column="generalBugs" property="generalBugs" jdbcType="INTEGER"/>
+        <result column="layoutBugs" property="layoutBugs" jdbcType="INTEGER"/>
+        <result column="textBugs" property="textBugs" jdbcType="INTEGER"/>
+        <result column="newfeatureBugs" property="newfeatureBugs" jdbcType="INTEGER"/>
+        <result column="totalBugs" property="totalBugs" jdbcType="INTEGER"/>
+    </resultMap>
+    <select id="statisticsEveryday" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        select j.project,#{date} AS date,#{pKey} as pKey,
+        sum(
+        CASE WHEN j.issuestatus = 1 THEN
+        1
+        ELSE
+        0
+        END
+        ) AS assignedBugs,
+        sum(
+        CASE
+        WHEN created &gt;= #{date}
+        AND created &lt; date_add(#{date},interval 1 day) THEN
+        1
+        ELSE
+        0
+        END
+        ) AS newBugs,
+        sum(
+        CASE
+        WHEN  j.issuestatus = 10318 THEN
+        1
+        ELSE
+        0
+        END
+        ) AS confirmedBugs,
+        sum(
+        CASE
+        WHEN  j.issuestatus = 10343 THEN
+        1
+        ELSE
+        0
+        END
+        ) AS resolvedBugs,
+        sum(
+        CASE
+        WHEN  j.issuestatus = 10342 THEN
+        1
+        ELSE
+        0
+        END
+        ) AS feedbackBugs,
+        sum(
+        CASE
+        WHEN j.issuestatus = 10345 THEN
+        1
+        ELSE
+        0
+        END
+        ) AS closedBugs
+        from jiraissue  j, project p where  j.project = p.id  and j.issuetype = 10102
+            AND p.pKey=#{pKey,jdbcType=VARCHAR}
+        GROUP BY j.project
+    </select>
+    <select id="statisticsBySeriousness" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+        SELECT j.project,#{pKey} as pKey,
+        sum( CASE WHEN c.stringvalue=10211 THEN 1 ELSE 0 END) AS seriousBugs,
+        sum( CASE WHEN c.stringvalue=10210 THEN 1 ELSE 0 END) AS secondaryBugs,
+        sum( CASE WHEN c.stringvalue=10209 THEN 1 ELSE 0 END) AS generalBugs,
+        sum( CASE WHEN c.stringvalue=10208 THEN 1 ELSE 0 END) AS layoutBugs,
+        sum( CASE WHEN c.stringvalue=10207 THEN 1 ELSE 0 END) AS textBugs,
+        sum( CASE WHEN c.stringvalue=10310 THEN 1 ELSE 0 END) AS newfeatureBugs,
+        sum(CASE WHEN j.issuestatus =10345 THEN 0 ELSE 1 END) AS totalBugs
+        from customfieldvalue c,jiraissue  j,project p where j.project = p.id and j.issuetype = 10102 and c.issue = j.id and c.customfield = 10310
+            AND p.pKey=#{pKey,jdbcType=VARCHAR}
+        GROUP BY j.project
+    </select>
+</mapper>
