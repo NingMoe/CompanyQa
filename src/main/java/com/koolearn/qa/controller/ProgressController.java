@@ -213,7 +213,7 @@ public class ProgressController {
             String cc = PropUtil.getSystemGlobalsProperties("mail.cc");
             List<String> ccAddress =new ArrayList<>(Arrays.asList(cc.split(Constant.COMMA)));
             //负责人添加到抄送人员列表
-            Product product =productService.selectById(Integer.valueOf(projectId));
+            Product product =productService.selectById(Integer.valueOf(project.getProductId()));
             ccAddress.addAll(transEmail(product.getLeader()));
             ccAddress = CommonUtil.list_unique(ccAddress);//去重
             ccAddress.removeAll(toAddress);//去除与发送地址相同的数据
