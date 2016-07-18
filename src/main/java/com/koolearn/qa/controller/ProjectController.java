@@ -5,10 +5,7 @@ import com.koolearn.ldap.service.LdapService;
 import com.koolearn.qa.constant.BugPlatformEnum;
 import com.koolearn.qa.constant.Constant;
 import com.koolearn.qa.constant.ProjectStatusEnum;
-import com.koolearn.qa.model.BugReport;
-import com.koolearn.qa.model.Plan;
-import com.koolearn.qa.model.Progress;
-import com.koolearn.qa.model.Project;
+import com.koolearn.qa.model.*;
 import com.koolearn.qa.service.*;
 import com.koolearn.qa.util.FileUtil;
 import com.koolearn.qa.util.MppUtil;
@@ -16,9 +13,11 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.UnsupportedEncodingException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
@@ -50,6 +49,9 @@ public class ProjectController {
 
     @Autowired
     private IBugReportService bugReportService;
+
+    @Autowired
+    private IMailerService mailerService;
 
     @RequestMapping(value = "/toProjectManager")
     public String toProjectManager(HttpServletRequest request, HttpServletResponse response) {
@@ -201,6 +203,50 @@ public class ProjectController {
             request.setAttribute("bugReport", bugReport);
         }
         return "/projectDetail";
+    }
+
+    @RequestMapping("/getEmails")
+    public String getEmails(HttpServletRequest request, HttpServletResponse response) throws ParseException, UnsupportedEncodingException {
+        String projectId = request.getParameter("projectId");
+        if (StringUtils.isNotBlank(projectId)) {
+            request.setAttribute("projectId",projectId);
+            Mailer mailer = mailerService.getMailerByProjectId(Integer.valueOf(projectId));
+            if(mailer!=null){
+                request.setAttribute("recipients",mailer.getRecipients());
+                request.setAttribute("cc",mailer.getCc());
+            }else{
+                Project project = projectService.selectById(Integer.valueOf(projectId));
+                Map<String,String> mailName = mailerService.getDefaultName(project);
+                request.setAttribute("recipients",mailName.get("recipients"));
+                request.setAttribute("cc",mailName.get("cc"));
+            }
+        }
+        List<LdapUser> userList = ldapService.queryUserAll();
+        request.setAttribute("userList", userList);
+        return "/mailManager";
+    }
+
+    @RequestMapping("/saveEmails")
+    public String saveEmails(HttpServletRequest request, HttpServletResponse response) throws ParseException, UnsupportedEncodingException {
+        String projectId = request.getParameter("projectId");
+        if (StringUtils.isNotBlank(projectId)) {
+            Mailer mailer = new Mailer();
+            mailer.setProjectId(Integer.valueOf(projectId));
+            if(StringUtils.isNotBlank(request.getParameter("recipients"))){
+                mailer.setRecipients(String.join(Constant.COMMA, request.getParameterValues("recipients")));
+            }
+            if(StringUtils.isNotBlank(request.getParameter("cc"))){
+                mailer.setCc(String.join(Constant.COMMA, request.getParameterValues("cc")));
+            }
+            Mailer m = mailerService.getMailerByProjectId(Integer.valueOf(projectId));
+            if(m!=null){
+                mailer.setId(m.getId());
+                mailerService.update(mailer);
+            }else{
+                mailerService.insert(mailer);
+            }
+        }
+        return toProjectManager(request,response);
     }
 
     private Project fillProjectParam(HttpServletRequest request) throws ParseException {

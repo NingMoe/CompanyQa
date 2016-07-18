@@ -63,18 +63,18 @@ public class ProgressServiceImpl extends GenericServiceImpl<Progress, Integer> i
 
     @Override
     public Progress getLastProgress(Integer projectId) {
-        List<Progress> list =progressMapper.selectByProjectId(projectId);
-        if(list != null){
-            return list.get(list.size()-1);
+        List<Progress> list = progressMapper.selectByProjectId(projectId);
+        if (list != null) {
+            return list.get(list.size() - 1);
         }
         return null;
     }
 
     @Override
     public Boolean isExist(Integer projectId, Date date) {
-        Map<String,Object> map = new HashMap<>();
-        map.put("projectId",projectId);
-        map.put("date",date);
+        Map<String, Object> map = new HashMap<>();
+        map.put("projectId", projectId);
+        map.put("date", date);
         int count = progressMapper.selectCountByDate(map);
         if (count == 0) {
             return false;
@@ -83,7 +83,7 @@ public class ProgressServiceImpl extends GenericServiceImpl<Progress, Integer> i
         return false;
     }
 
-    public BugStatistics statisticsBystaticEveryday(Map<String,Object> map, int platform) throws UnsupportedEncodingException {
+    public BugStatistics statisticsBystaticEveryday(Map<String, Object> map, int platform) throws UnsupportedEncodingException {
         if (platform == Integer.valueOf(BugPlatformEnum.mantis.getValue())) {
             if (map.get("version") != null) {
                 map.put("version", new String(map.get("version").toString().getBytes(), "latin1"));
@@ -92,30 +92,39 @@ public class ProgressServiceImpl extends GenericServiceImpl<Progress, Integer> i
                 map.put("category", new String(map.get("category").toString().getBytes(), "latin1"));
             }
             return mantisMapper.statisticsEveryday(map);
-        }else if (platform == Integer.valueOf(BugPlatformEnum.jira.getValue())) {
+        } else if (platform == Integer.valueOf(BugPlatformEnum.jira.getValue())) {
             return jiraMapper.statisticsEveryday(map);
         }
         return null;
     }
 
-    public String transHtmlContent(Project project,List<Progress> list){
+    public String transHtmlContent(Project project, List<Progress> list) {
         StringBuffer sb = new StringBuffer();
         sb.append("<html><table border='2' style='font-family: 宋体;font-size:18px;'><tr><td width='120'>项目名称</td><td colspan=\"7\">")
-                .append(project.getName()).append("</td></tr><tr><td>测试人员</td><td colspan=\"7\">")
-                .append(project.getTester()).append("</td></tr><tr><td>验收人员</td> <td colspan=\"7\">")
-                .append(project.getProducter()).append("</td></tr><tr><td>开发人员</td><td colspan=\"7\">")
-                .append(project.getDeveloper()).append("</td></tr><tr><td colspan=\"8\"><b>测试进度</b></td> </tr>");
-        for(int i=0;i<list.size();i++){
+                .append(project.getName()).append("</td></tr><tr><td>测试人员</td><td colspan=\"7\">");
+        if (StringUtils.isNotBlank(project.getTester())) {
+            sb.append(project.getTester());
+        }
+        sb.append("</td></tr><tr><td>验收人员</td> <td colspan=\"7\">");
+        if (StringUtils.isNotBlank(project.getProducter())) {
+            sb.append(project.getProducter());
+        }
+        sb.append("</td></tr><tr><td>开发人员</td><td colspan=\"7\">");
+        if (StringUtils.isNotBlank(project.getDeveloper())) {
+            sb.append(project.getDeveloper());
+        }
+        sb.append("</td></tr><tr><td colspan=\"8\"><b>测试进度</b></td> </tr>");
+        for (int i = 0; i < list.size(); i++) {
             Progress progress = list.get(i);
             sb.append("<tr><td style='color: dodgerblue'>").append(progress.getDate()).append("</td><td colspan='7' style='color: dodgerblue'>").append(progress.getProgress()).append("</td></tr>");
         }
         sb.append("<tr><td colspan=\"8\"><b>存在的问题</b></td></tr>");
-        for(int i=0;i<list.size();i++){
+        for (int i = 0; i < list.size(); i++) {
             Progress progress = list.get(i);
             sb.append("<tr><td style='color:dodgerblue'>").append(progress.getDate()).append("</td><td colspan='7' style='color: dodgerblue'>").append(progress.getProblem()).append("</td></tr>");
         }
         sb.append("<tr><td align='center'><b>日期</b></td><td align='center'><b>已测用例数</b></td><td align='center'><b>新提交bug数</b></td><td align='center'><b>已指派bug数</b></td><td align='center'><b>已确认bug数</b></td><td align='center'><b>已解决bug数</b></td><td align='center'><b>反馈bug数</b></td><td align='center'><b>已关闭bug数</b></td></tr>");
-        for(int i=0;i<list.size();i++) {
+        for (int i = 0; i < list.size(); i++) {
             Progress progress = list.get(i);
             sb.append("<tr><td style='color: ' align='center'>").append(progress.getDate()).append("</td><td style='color: dodgerblue' align='center'>").append(progress.getTestCases()).append("</td><td style='color: dodgerblue' align='center'>")
                     .append(progress.getNewBugs()).append("</td><td style='color: dodgerblue' align='center'>").append(progress.getAssignedBugs()).append("</td><td style='color: dodgerblue'>")
@@ -130,7 +139,7 @@ public class ProgressServiceImpl extends GenericServiceImpl<Progress, Integer> i
         return sb.toString();
     }
 
-    public void exportExcel(HttpServletResponse response, Project project, List<Progress>list){
+    public void exportExcel(HttpServletResponse response, Project project, List<Progress> list) {
         try {
             OutputStream output = response.getOutputStream();
             response.reset();
@@ -147,7 +156,7 @@ public class ProgressServiceImpl extends GenericServiceImpl<Progress, Integer> i
         }
     }
 
-    public String generateExcelFile(Project project, List<Progress>list){
+    public String generateExcelFile(Project project, List<Progress> list) {
         try {
             String fileName = project.getName() + "进度报告.xls";
             String randomPath = RandomStringUtils.randomAlphabetic(6);
@@ -155,9 +164,9 @@ public class ProgressServiceImpl extends GenericServiceImpl<Progress, Integer> i
             if (!dir.exists()) {
                 dir.mkdirs();
             }
-            String path = dir+"\\" + fileName;
+            String path = dir + "\\" + fileName;
             WritableWorkbook wk = Workbook.createWorkbook(new File(path));
-            generateExcel(wk,project,list);
+            generateExcel(wk, project, list);
             return path;
         } catch (IOException e) {
             e.printStackTrace();
@@ -165,7 +174,7 @@ public class ProgressServiceImpl extends GenericServiceImpl<Progress, Integer> i
         return null;
     }
 
-    private void generateExcel(WritableWorkbook wk, Project project, List<Progress>list) {
+    private void generateExcel(WritableWorkbook wk, Project project, List<Progress> list) {
         try {
             WritableSheet sheet = wk.createSheet(project.getName() + "进度报告", 0);
             sheet.getSettings().setDefaultColumnWidth(15);
@@ -200,24 +209,24 @@ public class ProgressServiceImpl extends GenericServiceImpl<Progress, Integer> i
             sheet.addCell(new Label(1, 2, project.getProducter(), cloumnFormat));
             sheet.addCell(new Label(1, 3, project.getDeveloper(), cloumnFormat));
             int row = 5;
-            if(list!=null){
-                for(int i=0;i<list.size();i++){
+            if (list != null) {
+                for (int i = 0; i < list.size(); i++) {
                     Progress progress = list.get(i);
                     sheet.addCell(new Label(0, row, progress.getDate(), cloumnFormat));
                     sheet.mergeCells(1, row, 7, row);
-                    sheet.addCell(new Label(1,row,progress.getProgress(),cloumnFormat));
+                    sheet.addCell(new Label(1, row, progress.getProgress(), cloumnFormat));
                     row++;
                 }
             }
             sheet.mergeCells(0, row, 7, row);
             sheet.addCell(new Label(0, row, "存在的问题", cloumnTitleFormat));
             row++;
-            if(list!=null){
-                for(int i=0;i<list.size();i++){
+            if (list != null) {
+                for (int i = 0; i < list.size(); i++) {
                     Progress progress = list.get(i);
                     sheet.addCell(new Label(0, row, progress.getDate(), cloumnFormat));
                     sheet.mergeCells(1, row, 7, row);
-                    sheet.addCell(new Label(1,row,progress.getProblem(),cloumnFormat));
+                    sheet.addCell(new Label(1, row, progress.getProblem(), cloumnFormat));
                     row++;
                 }
             }
@@ -238,17 +247,17 @@ public class ProgressServiceImpl extends GenericServiceImpl<Progress, Integer> i
             wcf.setAlignment(Alignment.CENTRE);
             wcf.setVerticalAlignment(VerticalAlignment.CENTRE);
             wcf.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN, jxl.format.Colour.BLACK); //BorderLineStyle边框
-            if(list!=null){
-                for(int i=0;i<list.size();i++){
+            if (list != null) {
+                for (int i = 0; i < list.size(); i++) {
                     Progress progress = list.get(i);
                     sheet.addCell(new Label(0, row, progress.getDate(), cloumnFormat));
-                    sheet.addCell(new Number(1,row,progress.getTestCases(),wcf));
-                    sheet.addCell(new Number(2,row,progress.getNewBugs(),wcf));
-                    sheet.addCell(new Number(3,row,progress.getAssignedBugs(),wcf));
-                    sheet.addCell(new Number(4,row,progress.getConfirmedBugs(),wcf));
-                    sheet.addCell(new Number(5,row,progress.getResolvedBugs(),wcf));
-                    sheet.addCell(new Number(6,row,progress.getFeedbackBugs(),wcf));
-                    sheet.addCell(new Number(7,row,progress.getClosedBugs(),wcf));
+                    sheet.addCell(new Number(1, row, progress.getTestCases(), wcf));
+                    sheet.addCell(new Number(2, row, progress.getNewBugs(), wcf));
+                    sheet.addCell(new Number(3, row, progress.getAssignedBugs(), wcf));
+                    sheet.addCell(new Number(4, row, progress.getConfirmedBugs(), wcf));
+                    sheet.addCell(new Number(5, row, progress.getResolvedBugs(), wcf));
+                    sheet.addCell(new Number(6, row, progress.getFeedbackBugs(), wcf));
+                    sheet.addCell(new Number(7, row, progress.getClosedBugs(), wcf));
                     row++;
                 }
             }

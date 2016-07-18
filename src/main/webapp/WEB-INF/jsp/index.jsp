@@ -44,6 +44,6 @@
     </div>
 </div>
 </div>
-<script type="text/javascript" src="/assets/plugins/bootstrap/js/bootstrap.min.js"/>
+<script type="text/javascript" src="<%=request.getContextPath() %>/assets/plugins/bootstrap/js/bootstrap.min.js"/>
 </body>
 </html>

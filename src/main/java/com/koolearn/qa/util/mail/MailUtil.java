@@ -43,10 +43,14 @@ public class MailUtil {
             mailMessage.setFrom(from);
             //创建邮件的接收者地址，并设置到邮件消息中, Message.RecipientType.TO属性表示接收者的类型为TO
             List<String> toAddress = mail.getToAddress();
-            mailMessage.setRecipients(Message.RecipientType.TO,InternetAddress.parse(StringUtils.join(toAddress.toArray(),Constant.COMMA)));
+            if(toAddress != null){
+                mailMessage.setRecipients(Message.RecipientType.TO,InternetAddress.parse(StringUtils.join(toAddress.toArray(),Constant.COMMA)));
+            }
             //邮件的抄送者地址
             List<String> ccAddress = mail.getCcAddress();
-            mailMessage.setRecipients(Message.RecipientType.CC,InternetAddress.parse(StringUtils.join(ccAddress.toArray(),Constant.COMMA)));
+            if(ccAddress!=null){
+                mailMessage.setRecipients(Message.RecipientType.CC,InternetAddress.parse(StringUtils.join(ccAddress.toArray(),Constant.COMMA)));
+            }
             // 设置邮件消息的主题
             mailMessage.setSubject(mail.getSubject());
             // 设置邮件消息发送的时间

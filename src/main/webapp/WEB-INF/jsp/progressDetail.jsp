@@ -122,6 +122,8 @@
             success: function (msg) {
                 if(msg=="success"){
                     alert("邮件发送成功");
+                }else if(msg == "null"){
+                    alert("请添加进度");
                 }else{
                     alert("邮件发送失败，请联系管理员!");
                 }

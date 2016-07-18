@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<!--命名空间-->
+<mapper namespace="com.koolearn.qa.dao.platform.MailerMapper">
+
+    <cache eviction="FIFO" flushInterval="60000" size="512" readOnly="true"/>
+    <!--列名到对象属性的映射 -->
+    <resultMap id="BaseResultMap" type="com.koolearn.qa.model.Mailer">
+        <id column="id" property="id" jdbcType="INTEGER"/>
+        <result column="projectId" property="projectId" jdbcType="INTEGER"/>
+        <result column="recipients" property="recipients" jdbcType="VARCHAR"/>
+        <result column="cc" property="cc" jdbcType="VARCHAR"/>
+    </resultMap>
+    <!--可被其他语句引用的可重用语句块。-->
+    <sql id="Base_Column_List">
+        id,projectId,recipients,cc
+    </sql>
+    <insert id="insertSelective" parameterType="com.koolearn.qa.model.Mailer">
+        insert into mailer
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">
+                id,
+            </if>
+            <if test="projectId!=null">
+                projectId,
+            </if>
+            <if test="recipients!=null">
+                recipients,
+            </if>
+            <if test="cc!=null">
+                cc,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="projectId != null">
+                #{projectId,jdbcType=INTEGER},
+            </if>
+            <if test="recipients != null">
+                #{recipients,jdbcType=VARCHAR},
+            </if>
+            <if test="cc != null">
+                #{cc,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.koolearn.qa.model.Mailer">
+        update mailer
+        set recipients = #{recipients,jdbcType=VARCHAR},cc = #{cc,jdbcType=VARCHAR}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <select id="selectByPrimaryKey" resultMap="BaseResultMap"
+            parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from mailer
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <select id="selectByProjectId" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+        select
+        <include refid="Base_Column_List"/>
+        from mailer
+        where projectId = #{projectId,jdbcType=INTEGER}
+    </select>
+</mapper>

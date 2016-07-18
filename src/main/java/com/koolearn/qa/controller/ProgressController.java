@@ -1,29 +1,21 @@
 package com.koolearn.qa.controller;
 
-import com.koolearn.ldap.dto.LdapUser;
 import com.koolearn.ldap.service.LdapService;
 import com.koolearn.qa.constant.Constant;
-import com.koolearn.qa.model.Product;
-import com.koolearn.qa.model.Progress;
-import com.koolearn.qa.model.Project;
-import com.koolearn.qa.model.User;
+import com.koolearn.qa.model.*;
+import com.koolearn.qa.service.IMailerService;
 import com.koolearn.qa.service.IProductService;
 import com.koolearn.qa.service.IProgressService;
 import com.koolearn.qa.service.IProjectService;
-import com.koolearn.qa.util.CommonUtil;
 import com.koolearn.qa.util.FileUtil;
-import com.koolearn.qa.util.PropUtil;
 import com.koolearn.qa.util.mail.Mail;
 import com.koolearn.qa.util.mail.MailUtil;
 import org.apache.commons.lang.StringUtils;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.session.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.security.auth.Subject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -52,6 +44,9 @@ public class ProgressController {
     @Autowired
     private IProductService productService;
 
+    @Autowired
+    private IMailerService mailerService;
+
     @RequestMapping(value = "/toAddProgress")
     public String toAddProgress(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, ParseException {
         String projectId = request.getParameter("projectId");
@@ -71,8 +66,8 @@ public class ProgressController {
             if (StringUtils.isNotBlank(project.getVersionMantis())) {
                 map.put("version", project.getVersionMantis());
             }
-            map.put("pKey",project.getpKey());
-            request.setAttribute("bugStatistics", progressService.statisticsBystaticEveryday(map,project.getBugPlatform()));
+            map.put("pKey", project.getpKey());
+            request.setAttribute("bugStatistics", progressService.statisticsBystaticEveryday(map, project.getBugPlatform()));
             request.setAttribute("date", formatter.format(new Date()));
             request.setAttribute("dateBefore", formatter.format(new Date()));
         }
@@ -110,8 +105,8 @@ public class ProgressController {
         if (StringUtils.isNotBlank(project.getVersionMantis())) {
             map.put("version", project.getVersionMantis());
         }
-        map.put("pKey",project.getpKey());
-        message.put("bugStatistics", progressService.statisticsBystaticEveryday(map,project.getBugPlatform()));
+        map.put("pKey", project.getpKey());
+        message.put("bugStatistics", progressService.statisticsBystaticEveryday(map, project.getBugPlatform()));
         return message;
     }
 
@@ -187,48 +182,45 @@ public class ProgressController {
     @ResponseBody
     public String sendMail(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         String message = "fail";
-       String projectId = request.getParameter("projectId");
+        String projectId = request.getParameter("projectId");
         if (StringUtils.isNotBlank(projectId)) {
             request.setAttribute("projectId", projectId);
             List<Progress> list = progressService.getProgressByProjectId(Integer.valueOf(projectId));
+            if (list == null || list.size() == 0) {
+                message = "null";
+                return message;
+            }
             Project project = projectService.selectById(Integer.valueOf(projectId));
             Mail mail = new Mail();
             User user = (User) request.getSession().getAttribute("user");
             mail.setFromAddress(user.getUserInfo().getEmail() + Constant.EMAIL_SUFFIX);
             mail.setUserName(user.getUserInfo().getEmail());
             mail.setPassword(user.getPassword());
-            StringBuffer sb = new StringBuffer();
-            if(StringUtils.isNotBlank(project.getDeveloper())){
-                sb.append(project.getDeveloper()).append(Constant.COMMA);
+            if (mailerService.isExist(Integer.valueOf(projectId))) {
+                Mailer mailer = mailerService.getMailerByProjectId(Integer.valueOf(projectId));
+                List<String> recipients = mailerService.transEmail(mailer.getRecipients());
+                List<String> cc = mailerService.transEmail(mailer.getCc());
+                if (cc != null) {
+                    cc.removeAll(recipients);//去除与发送地址相同的数据
+                }
+                mail.setToAddress(recipients);
+                mail.setCcAddress(cc);
+            } else {
+                Map<String, List<String>> map = mailerService.getDefaultMail(project);
+                mail.setToAddress(map.get("recipients"));
+                mail.setCcAddress(map.get("cc"));
             }
-            if(StringUtils.isNotBlank(project.getTester())){
-                sb.append(project.getTester()).append(Constant.COMMA);
-            }
-            if(StringUtils.isNotBlank(project.getProducter())){
-                sb.append(project.getProducter());
-            }
-            List<String> toAddress = transEmail(sb.toString());
-            mail.setToAddress(toAddress);
-            //抄送人员配置在SystemGloabals文件中
-            String cc = PropUtil.getSystemGlobalsProperties("mail.cc");
-            List<String> ccAddress =new ArrayList<>(Arrays.asList(cc.split(Constant.COMMA)));
-            //负责人添加到抄送人员列表
-            Product product =productService.selectById(Integer.valueOf(project.getProductId()));
-            ccAddress.addAll(transEmail(product.getLeader()));
-            ccAddress = CommonUtil.list_unique(ccAddress);//去重
-            ccAddress.removeAll(toAddress);//去除与发送地址相同的数据
-            mail.setCcAddress(ccAddress);
             mail.setSubject(project.getName() + "测试进度报告");
-            mail.setContent(progressService.transHtmlContent(project,list));
+            mail.setContent(progressService.transHtmlContent(project, list));
             String attachFileName = progressService.generateExcelFile(project, list);
-            if(attachFileName != null){
+            if (attachFileName != null) {
                 mail.setAttachFileNames(new String[]{attachFileName});
             }
             if (MailUtil.sendHtmlMail(mail)) {
-                message ="success";
+                message = "success";
             }
             //上传附件后删除生成的临时文件
-            if(attachFileName != null){
+            if (attachFileName != null) {
                 File file = new File(attachFileName);
                 FileUtil.deleteFolder(file.getParent());
             }
@@ -282,25 +274,6 @@ public class ProgressController {
         return progress;
     }
 
-    private List<String> transEmail(String str) {
-        List<String> list = new ArrayList<>();
-        if (StringUtils.isBlank(str)) {
-            return null;
-        }
-        StringBuffer sb = new StringBuffer();
-        String[] strArray = str.split(Constant.COMMA);
-        strArray = CommonUtil.array_unique(strArray);
-        for (int i = 0; i < strArray.length; i++) {
-            List<LdapUser> userList = ldapService.queryUser("(name=" + strArray[i] + ")");
-            LdapUser userInfo = userList.get(0);
-            if(userInfo.getEmail().endsWith(Constant.EMAIL_SUFFIX)){
-                list.add(userInfo.getEmail());
-            }else{
-                list.add(userInfo.getEmail()+ Constant.EMAIL_SUFFIX);
-            }
-        }
-       return list;
-    }
 
     @RequestMapping(value = "/exportExcel")
     @ResponseBody
@@ -310,7 +283,7 @@ public class ProgressController {
             request.setAttribute("projectId", projectId);
             List<Progress> list = progressService.getProgressByProjectId(Integer.valueOf(projectId));
             Project project = projectService.selectById(Integer.valueOf(projectId));
-            progressService.exportExcel(response,project,list);
+            progressService.exportExcel(response, project, list);
         }
         return toProgressDetail(request, response);
     }
