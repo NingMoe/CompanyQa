@@ -91,6 +91,9 @@ public class BugReportController {
                 map.put("version", project.getVersionMantis());
             }
             map.put("pKey", project.getpKey());
+            if(StringUtils.isNotBlank(project.getIssuenum())){
+                map.put("issuenum", project.getIssuenum().split(Constant.COMMA));
+            }
             BugStatistics bugStatistics = bugReportService.statisticsBySeriousness(map, project.getBugPlatform());
             if (bugStatistics == null) {
                 System.out.println("出错啦，未查询到记录");

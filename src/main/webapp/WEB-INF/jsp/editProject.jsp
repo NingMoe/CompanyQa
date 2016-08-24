@@ -59,6 +59,10 @@
         <div class="col-sm-3">
             <input type="text" class="form-control" name="pKey" id="pKey" value="${project.pKey}"/>
         </div>
+        <label class="col-sm-2 control-label" for="issuenum">jira需求号(逗号分隔)</label>
+        <div class="col-sm-3">
+            <input type="text" class="form-control" name="issuenum" id="issuenum" value="${project.issuenum}"/>
+        </div>
     </div>
     <div class="form-group">
         <label class="col-sm-2 control-label" for="productId"><span style="color:red;">*</span>所属系统</label>
@@ -265,9 +269,9 @@
             alert("mantis项目id不能为空！");
             document.getElementById('projectMantis').focus();
             return false;
-        } else if (document.getElementById('bugPlatform').value == 2 && document.getElementById('projectJira').value == "") {
+        } else if (document.getElementById('bugPlatform').value == 2 && document.getElementById('pKey').value == "") {
             alert("jira键值不能为空！");
-            document.getElementById('projectJira').focus();
+            document.getElementById('pKey').focus();
             return false;
         }
         if (document.getElementById("productId").value == "") {

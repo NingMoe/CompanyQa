@@ -273,7 +273,10 @@ public class ProjectController {
                 if (StringUtils.isNotBlank(request.getParameter("pKey"))) {
                     project.setpKey(request.getParameter("pKey"));
                 }
-                project.setProjectMantis(0);
+                if (StringUtils.isNotBlank(request.getParameter("issuenum"))) {
+                    project.setIssuenum(request.getParameter("issuenum"));
+                }
+                project.setProjectMantis(null);
                 project.setCategoryMantis(null);
                 project.setVersionMantis(null);
             }

@@ -75,6 +75,21 @@
         ) AS closedBugs
         from jiraissue  j, project p where  j.project = p.id  and j.issuetype = 10102
             AND p.pKey=#{pKey,jdbcType=VARCHAR}
+        <if test="issuenum != null">
+            AND  j.id in
+            ( select l.source from issuelink l,jiraissue s where l.destination = s.id and s.issuenum in
+            <foreach item="item" index="index" collection="issuenum"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            and l.linktype=10000
+            union select l.destination  from issuelink l,jiraissue s where l.source = s.id and s.issuenum in
+            <foreach item="item" index="index" collection="issuenum"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            and l.linktype=10003)
+        </if>
         GROUP BY j.project
     </select>
     <select id="statisticsBySeriousness" resultMap="BaseResultMap" parameterType="java.util.HashMap">
@@ -88,6 +103,21 @@
         sum(CASE WHEN j.issuestatus =10345 THEN 0 ELSE 1 END) AS totalBugs
         from customfieldvalue c,jiraissue  j,project p where j.project = p.id and j.issuetype = 10102 and c.issue = j.id and c.customfield = 10310
             AND p.pKey=#{pKey,jdbcType=VARCHAR}
+        <if test="issuenum != null">
+            AND  j.id in
+            ( select l.source from issuelink l,jiraissue s where l.destination = s.id and s.issuenum in
+            <foreach item="item" index="index" collection="issuenum"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            and l.linktype=10000
+            union select l.destination  from issuelink l,jiraissue s where l.source = s.id and s.issuenum in
+            <foreach item="item" index="index" collection="issuenum"
+                     open="(" separator="," close=")">
+                #{item}
+            </foreach>
+            and l.linktype=10003)
+        </if>
         GROUP BY j.project
     </select>
 </mapper>
