@@ -243,7 +243,7 @@
                 pKey = #{pKey,jdbcType=VARCHAR},
             </if>
             <if test="issuenum!=null">
-                pKey = #{issuenum,jdbcType=VARCHAR},
+                issuenum = #{issuenum,jdbcType=VARCHAR},
             </if>
             <if test="productId != null">
                 productId = #{productId,jdbcType=INTEGER},

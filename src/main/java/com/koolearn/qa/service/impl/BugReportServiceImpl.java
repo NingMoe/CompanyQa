@@ -8,11 +8,9 @@ import com.koolearn.qa.generic.GenericDao;
 import com.koolearn.qa.generic.GenericServiceImpl;
 import com.koolearn.qa.model.BugReport;
 import com.koolearn.qa.model.BugStatistics;
-import com.koolearn.qa.model.Mantis;
 import com.koolearn.qa.model.Project;
 import com.koolearn.qa.service.IBugReportService;
-import com.koolearn.qa.util.FileUtil;
-import jxl.CellView;
+import com.koolearn.qa.util.CommonUtil;
 import jxl.Workbook;
 import jxl.format.*;
 import jxl.format.Alignment;
@@ -327,7 +325,7 @@ public class BugReportServiceImpl extends GenericServiceImpl<BugReport, Integer>
             lab_016Format.setVerticalAlignment(VerticalAlignment.TOP);
             lab_016Format.setBorder(jxl.format.Border.ALL, jxl.format.BorderLineStyle.THIN, jxl.format.Colour.BLACK); //BorderLineStyle边框
             sheet.setRowView(16, 3000);
-            sheet.addCell(new Label(0, 16, bugReport.getTestResult(), lab_016Format));
+            sheet.addCell(new Label(0, 16, CommonUtil.html2Text(bugReport.getTestResult()), lab_016Format));
             //将定义的工作表输出到之前指定的介质中（这里是客户端浏览器）
             wk.write();
             //操作完成时，关闭对象，释放占用的内存空间
