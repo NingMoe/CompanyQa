@@ -1,6 +1,5 @@
 package com.koolearn.qa.dao.platform;
 
-import com.koolearn.qa.generic.GenericDao;
 import com.koolearn.qa.model.Role;
 
 import java.util.List;

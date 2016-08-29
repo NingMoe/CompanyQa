@@ -1,7 +1,6 @@
 package com.koolearn.qa.service;
 
 import com.koolearn.qa.generic.GenericService;
-import com.koolearn.qa.generic.GenericServiceImpl;
 import com.koolearn.qa.model.Product;
 
 import java.util.List;

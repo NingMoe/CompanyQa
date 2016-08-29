@@ -1,8 +1,5 @@
 package com.koolearn.qa.model;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
 /**
  * @author lihuiyan
  * @description

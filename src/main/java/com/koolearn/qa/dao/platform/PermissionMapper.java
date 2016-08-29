@@ -1,8 +1,6 @@
 package com.koolearn.qa.dao.platform;
 
-import com.koolearn.qa.generic.GenericDao;
 import com.koolearn.qa.model.Permission;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 

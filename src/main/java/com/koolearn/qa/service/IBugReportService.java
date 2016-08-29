@@ -3,7 +3,6 @@ package com.koolearn.qa.service;
 import com.koolearn.qa.generic.GenericService;
 import com.koolearn.qa.model.BugReport;
 import com.koolearn.qa.model.BugStatistics;
-import com.koolearn.qa.model.Mantis;
 import com.koolearn.qa.model.Project;
 
 import javax.servlet.http.HttpServletResponse;

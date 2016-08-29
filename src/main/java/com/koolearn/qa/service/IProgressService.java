@@ -2,7 +2,6 @@ package com.koolearn.qa.service;
 
 import com.koolearn.qa.generic.GenericService;
 import com.koolearn.qa.model.BugStatistics;
-import com.koolearn.qa.model.Mantis;
 import com.koolearn.qa.model.Progress;
 import com.koolearn.qa.model.Project;
 

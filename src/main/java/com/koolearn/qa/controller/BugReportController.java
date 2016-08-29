@@ -1,25 +1,15 @@
 package com.koolearn.qa.controller;
 
-import com.koolearn.ldap.dto.LdapUser;
 import com.koolearn.ldap.service.LdapService;
-import com.koolearn.qa.constant.BugPlatformEnum;
 import com.koolearn.qa.constant.Constant;
 import com.koolearn.qa.model.*;
 import com.koolearn.qa.service.IBugReportService;
 import com.koolearn.qa.service.IMailerService;
 import com.koolearn.qa.service.IProductService;
 import com.koolearn.qa.service.IProjectService;
-import com.koolearn.qa.util.CommonUtil;
 import com.koolearn.qa.util.FileUtil;
-import com.koolearn.qa.util.PropUtil;
 import com.koolearn.qa.util.mail.Mail;
 import com.koolearn.qa.util.mail.MailUtil;
-import jxl.Workbook;
-import jxl.format.Colour;
-import jxl.format.UnderlineStyle;
-import jxl.write.*;
-import jxl.write.Number;
-import jxl.write.biff.RowsExceededException;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,10 +19,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author lihuiyan
@@ -91,7 +81,7 @@ public class BugReportController {
                 map.put("version", project.getVersionMantis());
             }
             map.put("pKey", project.getpKey());
-            if(StringUtils.isNotBlank(project.getIssuenum())){
+            if (StringUtils.isNotBlank(project.getIssuenum())) {
                 map.put("issuenum", project.getIssuenum().split(Constant.COMMA));
             }
             BugStatistics bugStatistics = bugReportService.statisticsBySeriousness(map, project.getBugPlatform());
@@ -192,7 +182,7 @@ public class BugReportController {
             request.setAttribute("projectId", projectId);
             Project project = projectService.selectById(Integer.valueOf(projectId));
             BugReport bugReport = bugReportService.getBugReportByProjectId(Integer.valueOf(projectId));
-            if(bugReport == null){
+            if (bugReport == null) {
                 message = "null";
                 return message;
             }
@@ -205,7 +195,7 @@ public class BugReportController {
                 Mailer mailer = mailerService.getMailerByProjectId(Integer.valueOf(projectId));
                 List<String> recipients = mailerService.transEmail(mailer.getRecipients());
                 List<String> cc = mailerService.transEmail(mailer.getCc());
-                if(cc!=null){
+                if (cc != null) {
                     cc.removeAll(recipients);//去除与发送地址相同的数据
                 }
                 mail.setToAddress(recipients);

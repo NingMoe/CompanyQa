@@ -3,7 +3,6 @@ package com.koolearn.qa.dao.platform;
 import com.koolearn.qa.generic.GenericDao;
 import com.koolearn.qa.model.Progress;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 

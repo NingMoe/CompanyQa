@@ -1,7 +1,5 @@
 package com.koolearn.qa.generic;
 
-import java.util.List;
-
 /**
  * 所有自定义Dao的顶级接口, 封装常用的增删查改操作,
  * Model : 代表数据库中的表 映射的Java对象类型

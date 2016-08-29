@@ -2,7 +2,6 @@ package com.koolearn.qa.controller;
 
 import com.koolearn.ldap.dto.LdapUser;
 import com.koolearn.ldap.service.LdapService;
-import com.koolearn.qa.constant.GroupEnum;
 import com.koolearn.qa.constant.StatusEnum;
 import com.koolearn.qa.model.Product;
 import com.koolearn.qa.service.IGroupService;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
