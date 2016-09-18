@@ -34,7 +34,7 @@
     </tr>
     <tr>
         <td><b>开发人员</b></td>
-        <td colspan="6">${project.producter}</td>
+        <td colspan="6">${project.developer}</td>
     </tr>
     <tr>
         <td><b>测试计划时间</b></td>

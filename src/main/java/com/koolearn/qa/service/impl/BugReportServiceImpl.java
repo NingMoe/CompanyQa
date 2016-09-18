@@ -91,7 +91,7 @@ public class BugReportServiceImpl extends GenericServiceImpl<BugReport, Integer>
         }
         sb.append("</td></tr><tr><td>开发人员</td> <td colspan=\"6\">");
         if (StringUtils.isNotBlank(project.getProducter())) {
-            sb.append(project.getProducter());
+            sb.append(project.getDeveloper());
         }
         sb.append("</td></tr><tr><td>测试计划时间</td> <td colspan=\"6\">");
         if (StringUtils.isNotBlank(project.getStartTime2plan())) {
