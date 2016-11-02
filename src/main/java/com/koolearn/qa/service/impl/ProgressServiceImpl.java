@@ -129,9 +129,9 @@ public class ProgressServiceImpl extends GenericServiceImpl<Progress, Integer> i
                     .append(progress.getFeedbackBugs()).append("</td><td style='color: dodgerblue' align='center'>").append(progress.getClosedBugs()).append("</td></tr>");
         }
         sb.append("<tr><td colspan=\"8\"><b>说明</b></td></tr><tr><td colspan=\"8\">1.“已测用例数”是指每天执行testlink的case数<br/>")
-                .append("2.“新提交bug数”是指汇报当日新提交的bug数<br/>3.“已指派bug数”是指汇报时mantis上“已指派”状态的bug总数<br/>")
-                .append("4.“已确认bug数”是指汇报时mantis上“已确认”状态的bug总数<br/>5.“已解决bug数”是指汇报时mantis上“已解决”状态的bug总数<br/>")
-                .append("6.“反馈bug数”　是指汇报时mantis上“反馈”　状态的bug总数<br/>7.“已关闭bug数”是指汇报时mantis上“已关闭”状态的bug总数")
+                .append("2.“新提交bug数”是指汇报当日新提交的bug数<br/>3.“已指派bug数”是指汇报时“已指派”状态的bug总数<br/>")
+                .append("4.“已确认bug数”是指汇报时“已确认”状态的bug总数<br/>5.“已解决bug数”是指汇报时“已解决”状态的bug总数<br/>")
+                .append("6.“反馈bug数”　是指汇报时“反馈”　状态的bug总数<br/>7.“已关闭bug数”是指汇报时“已关闭”状态的bug总数")
                 .append("</td></tr></table></html>");
         return sb.toString();
     }
@@ -265,11 +265,11 @@ public class ProgressServiceImpl extends GenericServiceImpl<Progress, Integer> i
             sheet.setRowView(row, 2200);
             sheet.addCell(new Label(0, row, "1.“已测用例数”是指每天执行testlink的case数\n" +
                     "2.“新提交bug数”是指汇报当日新提交的bug数\n" +
-                    "3.“已指派bug数”是指汇报时mantis上“已指派”状态的bug总数\n" +
-                    "4.“已确认bug数”是指汇报时mantis上“已确认”状态的bug总数\n" +
-                    "5.“已解决bug数”是指汇报时mantis上“已解决”状态的bug总数\n" +
-                    "6.“反馈bug数”　是指汇报时mantis上“反馈”　状态的bug总数\n" +
-                    "7.“已关闭bug数”是指汇报时mantis上“已关闭”状态的bug总数", cloumnFormat));
+                    "3.“已指派bug数”是指汇报时“已指派”状态的bug总数\n" +
+                    "4.“已确认bug数”是指汇报时“已确认”状态的bug总数\n" +
+                    "5.“已解决bug数”是指汇报时“已解决”状态的bug总数\n" +
+                    "6.“反馈bug数”　是指汇报时“反馈”　状态的bug总数\n" +
+                    "7.“已关闭bug数”是指汇报时“已关闭”状态的bug总数", cloumnFormat));
             wk.write();
             //操作完成时，关闭对象，释放占用的内存空间
             wk.close();
