@@ -1,7 +1,6 @@
 package com.koolearn.qa.util;
 
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -16,13 +15,8 @@ public class PropUtil {
      * @return
      */
     public static String getProperty(String propPath, String name) {
-        Properties p = new Properties();
-        try {
-            p.load(new FileReader(new File(propPath)));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return p.getProperty(name);
+        Map<String, String> map = getProperties(propPath);
+        return map.get(name);
     }
 
 
@@ -37,8 +31,13 @@ public class PropUtil {
         Map<String, String> kvMap = new HashMap<String, String>();
         Properties p = new Properties();
         try {
-            p.load(new FileReader(new File(propPath)));
-        } catch (Exception e) {
+            String projectPath = PropUtil.class.getClassLoader().getResource("").getPath();
+            String configPath = java.net.URLDecoder.decode(projectPath,"utf-8");
+            BufferedReader br=new BufferedReader(new InputStreamReader(new FileInputStream(new File(configPath+propPath)),"UTF-8"));
+            p.load(br);
+            br.close();
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -55,7 +54,6 @@ public class PropUtil {
      * @return
      */
     public static String getSystemGlobalsProperties(String name) {
-        String path = PropUtil.class.getResource("/").getPath()+"systemGlobals.properties";
-        return getProperty(path,name);
+        return getProperty("systemGlobals.properties",name);
     }
 }

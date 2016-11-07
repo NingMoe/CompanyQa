@@ -80,9 +80,14 @@ public class BugReportController {
             if (StringUtils.isNotBlank(project.getVersionMantis())) {
                 map.put("version", project.getVersionMantis());
             }
-            map.put("pKey", project.getpKey());
+            if(StringUtils.isNotBlank(project.getpKey())){
+                map.put("pKey", project.getpKey());
+            }
             if (StringUtils.isNotBlank(project.getIssuenum())) {
                 map.put("issuenum", project.getIssuenum().split(Constant.COMMA));
+            }
+            if(StringUtils.isNotBlank(project.getComponent())){
+                map.put("component",project.getComponent());
             }
             BugStatistics bugStatistics = bugReportService.statisticsBySeriousness(map, project.getBugPlatform());
             if (bugStatistics == null) {

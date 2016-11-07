@@ -15,6 +15,7 @@
         <result column="versionMantis" property="versionMantis" jdbcType="VARCHAR"/>
         <result column="pKey" property="pKey" jdbcType="VARCHAR"/>
         <result column="issuenum" property="issuenum" jdbcType="VARCHAR"/>
+        <result column="component" property="component" jdbcType="VARCHAR"/>
         <result column="productId" property="productId" jdbcType="INTEGER"/>
         <result column="producter" property="producter" jdbcType="VARCHAR"/>
         <result column="developer" property="developer" jdbcType="VARCHAR"/>
@@ -35,7 +36,7 @@
     </resultMap>
     <!--可被其他语句引用的可重用语句块。-->
     <sql id="Base_Column_List">
-        id,name,bugPlatform,projectMantis,categoryMantis,versionMantis,pKey,issuenum,productId,producter,developer,tester,startTime2plan,endTime2plan,startTime2actual,endTime2actual,projectStatus,days,requirementDays,developDays,testDays,acceptanceDays,onlineDays,description,status
+        id,name,bugPlatform,projectMantis,categoryMantis,versionMantis,pKey,issuenum,component,productId,producter,developer,tester,startTime2plan,endTime2plan,startTime2actual,endTime2actual,projectStatus,days,requirementDays,developDays,testDays,acceptanceDays,onlineDays,description,status
     </sql>
     <update id="updateByPrimaryKey" parameterType="com.koolearn.qa.model.Project">
         UPDATE  project SET
@@ -45,6 +46,7 @@
             categoryMantis=#{categoryMantis,jdbcType=VARCHAR},
             versionMantis = #{versionMantis,jdbcType=VARCHAR},
             pKey=#{pKey,jdbcType=VARCHAR},
+            component=#{component,jdbcType=VARCHAR},
             issuenum=#{issuenum,jdbcType=VARCHAR},
             productId = #{productId,jdbcType=INTEGER},
             producter = #{producter,jdbcType=VARCHAR},
@@ -90,6 +92,9 @@
             </if>
             <if test="issuenum!=null">
                 issuenum,
+            </if>
+            <if test="component!=null">
+                component,
             </if>
             <if test="productId!=null">
                 productId,
@@ -168,6 +173,9 @@
             <if test="issuenum!=null">
                 #{issuenum,jdbcType=VARCHAR},
             </if>
+            <if test="component!=null">
+                #{component,jdbcType=VARCHAR},
+            </if>
             <if test="productId != null">
                 #{productId,jdbcType=INTEGER},
             </if>
@@ -244,6 +252,9 @@
             </if>
             <if test="issuenum!=null">
                 issuenum = #{issuenum,jdbcType=VARCHAR},
+            </if>
+            <if test="component!=null">
+                component=#{component,jdbcType=VARCHAR},
             </if>
             <if test="productId != null">
                 productId = #{productId,jdbcType=INTEGER},

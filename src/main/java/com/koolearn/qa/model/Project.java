@@ -28,6 +28,7 @@ public class Project {
     //jira键值
     private String pKey;
     private String issuenum;
+    private String component;
 
     //产品人员
     private String producter;
@@ -134,6 +135,14 @@ public class Project {
 
     public void setIssuenum(String issuenum) {
         this.issuenum = issuenum;
+    }
+
+    public String getComponent() {
+        return component;
+    }
+
+    public void setComponent(String component) {
+        this.component = component;
     }
 
     public String getProducter() {
@@ -288,6 +297,7 @@ public class Project {
                 ", versionMantis='" + versionMantis + '\'' +
                 ",pKey='"+pKey+'\''+
                 ",issuenum='"+issuenum+'\''+
+                ",component='"+component+'\''+
                 ", producter='" + producter + '\'' +
                 ", developer='" + developer + '\'' +
                 ", tester='" + tester + '\'' +

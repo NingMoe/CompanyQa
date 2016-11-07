@@ -66,9 +66,14 @@ public class ProgressController {
             if (StringUtils.isNotBlank(project.getVersionMantis())) {
                 map.put("version", project.getVersionMantis());
             }
-            map.put("pKey", project.getpKey());
+            if(StringUtils.isNotBlank(project.getpKey())){
+                map.put("pKey", project.getpKey());
+            }
             if(StringUtils.isNotBlank(project.getIssuenum())){
                 map.put("issuenum", project.getIssuenum().split(Constant.COMMA));
+            }
+            if(StringUtils.isNotBlank(project.getComponent())){
+                map.put("component",project.getComponent());
             }
             request.setAttribute("bugStatistics", progressService.statisticsBystaticEveryday(map, project.getBugPlatform()));
             request.setAttribute("date", formatter.format(new Date()));
@@ -108,9 +113,14 @@ public class ProgressController {
         if (StringUtils.isNotBlank(project.getVersionMantis())) {
             map.put("version", project.getVersionMantis());
         }
-        map.put("pKey", project.getpKey());
+        if(StringUtils.isNotBlank(project.getpKey())){
+            map.put("pKey", project.getpKey());
+        }
         if(StringUtils.isNotBlank(project.getIssuenum())){
             map.put("issuenum", project.getIssuenum().split(Constant.COMMA));
+        }
+        if(StringUtils.isNotBlank(project.getComponent())){
+            map.put("compenent",project.getComponent());
         }
         message.put("bugStatistics", progressService.statisticsBystaticEveryday(map, project.getBugPlatform()));
         return message;

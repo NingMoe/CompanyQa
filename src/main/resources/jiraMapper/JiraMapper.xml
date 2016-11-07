@@ -26,7 +26,7 @@
     <select id="statisticsEveryday" resultMap="BaseResultMap" parameterType="java.util.HashMap">
         select j.project,#{date} AS date,#{pKey} as pKey,
         sum(
-        CASE WHEN j.issuestatus = 1 THEN
+        CASE WHEN j.issuestatus in (1,10330,10331) THEN
         1
         ELSE
         0
@@ -90,6 +90,14 @@
             </foreach>
             and l.linktype=10003)
         </if>
+        <if test="component != null">
+            AND j.id in(
+            select SOURCE_NODE_ID
+            from nodeassociation
+            where ASSOCIATION_TYPE='IssueComponent'
+                  and SINK_NODE_ID = (select id from component where cname = #{component,jdbcType=VARCHAR})
+            )
+        </if>
         GROUP BY j.project
     </select>
     <select id="statisticsBySeriousness" resultMap="BaseResultMap" parameterType="java.util.HashMap">
@@ -102,7 +110,7 @@
         sum( CASE WHEN c.stringvalue=10310 THEN 1 ELSE 0 END) AS newfeatureBugs,
         sum(CASE WHEN j.issuestatus =10345 THEN 0 ELSE 1 END) AS totalBugs
         from customfieldvalue c,jiraissue  j,project p where j.project = p.id and j.issuetype = 10102 and c.issue = j.id and c.customfield = 10310
-            AND p.pKey=#{pKey,jdbcType=VARCHAR}
+            AND p.pKey=#{pKey,jdbcType=VARCHAR} AND j.issuestatus !=10345
         <if test="issuenum != null">
             AND  j.id in
             ( select l.source from issuelink l,jiraissue s where l.destination = s.id and s.issuenum in
@@ -117,6 +125,14 @@
                 #{item}
             </foreach>
             and l.linktype=10003)
+        </if>
+        <if test="component != null">
+            AND j.id in(
+            select SOURCE_NODE_ID
+            from nodeassociation
+            where ASSOCIATION_TYPE='IssueComponent'
+            and SINK_NODE_ID = (select id from component where cname = #{component,jdbcType=VARCHAR})
+            )
         </if>
         GROUP BY j.project
     </select>

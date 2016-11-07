@@ -1,9 +1,7 @@
 package com.koolearn.qa.util;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.TreeSet;
+import java.text.NumberFormat;
+import java.util.*;
 import java.util.regex.Pattern;
 
 /**
@@ -38,8 +36,8 @@ public class CommonUtil {
      * @return
      */
     public static String html2Text(String htmlStr) {
-        htmlStr = htmlStr.replaceAll("</div><div>","\n");
-        htmlStr = htmlStr.replaceAll("<div>","\n");
+        htmlStr = htmlStr.replaceAll("</div><div>", "\n");
+        htmlStr = htmlStr.replaceAll("<div>", "\n");
         String textStr = "";
         Pattern p_script;
         java.util.regex.Matcher m_script;
@@ -86,6 +84,40 @@ public class CommonUtil {
         }
 
         return textStr;//返回文本字符串
+    }
+
+    /**
+     * 格式化为百分数，保留num位
+     *
+     * @param d
+     * @param num
+     * @return
+     */
+    public static String percentFormat(double d, int num) {
+        //获取格式化对象
+        NumberFormat nt = NumberFormat.getPercentInstance();
+        //设置百分数精确度
+        nt.setMinimumFractionDigits(num);
+        return nt.format(d);
+    }
+
+    /**
+     * 获取map中第一个数据值
+     *
+     * @param <K> Key的类型
+     * @param <V> Value的类型
+     * @param map 数据源
+     * @return 返回的值
+     */
+    public static <K, V> V getFirstOrNull(Map<K, V> map) {
+        V obj = null;
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            obj = entry.getValue();
+            if (obj != null) {
+                break;
+            }
+        }
+        return obj;
     }
 
 }

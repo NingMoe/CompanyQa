@@ -56,11 +56,15 @@
 
     <div class="form-group" id="jira" <c:if test="${project.bugPlatform!=2}">hidden</c:if>>
         <label class="col-sm-2 control-label" for="pKey"><span style="color:red;">*</span>jira键值</label>
-        <div class="col-sm-3">
+        <div class="col-sm-2">
             <input type="text" class="form-control" name="pKey" id="pKey" value="${project.pKey}"/>
         </div>
-        <label class="col-sm-2 control-label" for="issuenum">jira需求号(逗号分隔)</label>
-        <div class="col-sm-3">
+        <label class="col-sm-2 control-label" for="component">模块</label>
+        <div class="col-sm-2">
+            <input type="text" class="form-control" name="component" id="component" value="${project.component}"/>
+        </div>
+        <label class="col-sm-2 control-label" for="issuenum">需求号</label>
+        <div class="col-sm-2">
             <input type="text" class="form-control" name="issuenum" id="issuenum" value="${project.issuenum}"/>
         </div>
     </div>
