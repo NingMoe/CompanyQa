@@ -59,11 +59,11 @@
         <div class="col-sm-2">
             <input type="text" class="form-control" name="pKey" id="pKey" value="${project.pKey}"/>
         </div>
-        <label class="col-sm-2 control-label" for="component">模块</label>
+        <label class="col-sm-1 control-label" for="component">模块</label>
         <div class="col-sm-2">
             <input type="text" class="form-control" name="component" id="component" value="${project.component}"/>
         </div>
-        <label class="col-sm-2 control-label" for="issuenum">需求号</label>
+        <label class="col-sm-2 control-label" for="issuenum">需求号(逗号分隔)</label>
         <div class="col-sm-2">
             <input type="text" class="form-control" name="issuenum" id="issuenum" value="${project.issuenum}"/>
         </div>

@@ -58,6 +58,16 @@
                            style="text-align:left">${project.versionMantis}</label>
                 </div>
             </c:if>
+            <c:if test="${project.bugPlatform==2}">
+                <div class="form-group">
+                    <label class="col-md-2 control-label" for="component">jira模块:</label>
+                    <label id="component" class="col-md-2 control-label"
+                           style="text-align:left">${project.component}</label>
+                    <label class="col-md-2 control-label" for="issuenum">jira需求号:</label>
+                    <label id="issuenum" class="col-md-2 control-label"
+                           style="text-align:left">${project.issuenum}</label>
+                </div>
+            </c:if>
             <div class="form-group">
                 <label class="col-md-2 control-label" for="productId">所属系统:</label>
                 <label id="productId" class="col-md-2 control-label" style="text-align:left">
