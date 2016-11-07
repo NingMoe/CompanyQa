@@ -28,9 +28,9 @@
             <li>
                 <a href="<%=request.getContextPath() %>/project/toProjectManager" target="mainFrame">项目管理</a>
             </li>
-            <li>
+            <%--<li>
                 <a href="<%=request.getContextPath() %>/interfaceTest/toInterfaceManager" target="mainFrame">接口测试</a>
-            </li>
+            </li>--%>
             <shiro:hasRole name="admin">
                 <li>
                     <a href="<%=request.getContextPath() %>/group/toGroupManager" target="mainFrame">分组管理</a>
