@@ -134,11 +134,13 @@ public class MailerServiceImpl extends GenericServiceImpl<Mailer, Integer> imple
         strArray = CommonUtil.array_unique(strArray);
         for (int i = 0; i < strArray.length; i++) {
             List<LdapUser> userList = ldapService.queryUser("(name=" + strArray[i] + ")");
-            LdapUser userInfo = userList.get(0);
-            if (userInfo.getEmail().endsWith(Constant.EMAIL_SUFFIX)) {
-                list.add(userInfo.getEmail());
-            } else {
-                list.add(userInfo.getEmail() + Constant.EMAIL_SUFFIX);
+            if(userList!=null && userList.size()>0){
+                LdapUser userInfo = userList.get(0);
+                if (userInfo.getEmail().endsWith(Constant.EMAIL_SUFFIX)) {
+                    list.add(userInfo.getEmail());
+                } else {
+                    list.add(userInfo.getEmail() + Constant.EMAIL_SUFFIX);
+                }
             }
         }
         return list;
