@@ -10,10 +10,10 @@
     <!-- 提供方应用信息，用于计算依赖关系 -->
     <dubbo:application name="koo-qa-platform" />
     <!-- 使用multicast广播注册中心暴露服务地址 -->
-    <dubbo:registry address="zookeeper://10.155.20.62:2181" protocol="zookeeper"/>
+    <dubbo:registry address="zookeeper://10.155.20.62:2181"/>
 
     <!-- 远程服务调用重试次数，不包括第一次调用 -->
     <dubbo:consumer retries="0" timeout="60000" />
 
-    <dubbo:reference id="ldapService" interface="com.koolearn.ldap.service.LdapService" url="dubbo://10.155.20.51:20885"  />
+    <dubbo:reference id="ldapService" interface="com.koolearn.ldap.service.LdapService" />
 </beans>
