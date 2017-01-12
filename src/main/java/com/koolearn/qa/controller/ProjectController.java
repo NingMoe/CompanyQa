@@ -232,10 +232,10 @@ public class ProjectController {
             Mailer mailer = new Mailer();
             mailer.setProjectId(Integer.valueOf(projectId));
             if(StringUtils.isNotBlank(request.getParameter("recipients"))){
-                mailer.setRecipients(String.join(Constant.COMMA, request.getParameterValues("recipients")));
+                mailer.setRecipients(StringUtils.join(request.getParameterValues("recipients"),Constant.COMMA));
             }
             if(StringUtils.isNotBlank(request.getParameter("cc"))){
-                mailer.setCc(String.join(Constant.COMMA, request.getParameterValues("cc")));
+                mailer.setCc(StringUtils.join(request.getParameterValues("cc"),Constant.COMMA));
             }
             Mailer m = mailerService.getMailerByProjectId(Integer.valueOf(projectId));
             if(m!=null){
@@ -290,13 +290,13 @@ public class ProjectController {
             project.setName(request.getParameter("name"));
         }
         if (request.getParameterValues("producter") != null) {
-            project.setProducter(String.join(Constant.COMMA, request.getParameterValues("producter")));
+            project.setProducter(StringUtils.join(request.getParameterValues("producter"),Constant.COMMA));
         }
         if (request.getParameterValues("developer") != null) {
-            project.setDeveloper(String.join(Constant.COMMA, request.getParameterValues("developer")));
+            project.setDeveloper(StringUtils.join(request.getParameterValues("developer"),Constant.COMMA));
         }
         if (request.getParameterValues("tester") != null) {
-            project.setTester(String.join(Constant.COMMA, request.getParameterValues("tester")));
+            project.setTester(StringUtils.join(request.getParameterValues("tester"),Constant.COMMA));
         }
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         String startTime2plan = request.getParameter("startTime2plan");
